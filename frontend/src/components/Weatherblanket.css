@@ -1,0 +1,291 @@
+/* CSS for weatherblanketblanket app */
+#heatblanket {
+    height: 80vh;
+    width: 80vw;
+    margin: auto;
+    margin-top: 5vh;
+    position: relative;
+}
+
+#weatherblanket-wrapper:after {
+    content:'';
+    display:block;
+    position:absolute;
+    width: 80vw;
+    height: 80vh;
+    background-image: url("../images/simple-texture.png");
+    background-size: auto;
+    pointer-events: none;
+    opacity: 50%;
+}
+
+#weatherblanket-wrapper {
+    -webkit-user-select: none; /* Safari */
+    -ms-user-select: none; /* IE 10 and IE 11 */
+    user-select: none; /* Standard syntax */
+    transition: 1s;
+    width: 80vw;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(100px, auto));
+    
+}
+
+.heat-column {
+    flex: 1;
+    max-height: 80vh;
+    z-index: -1;
+}
+
+.rain-column {
+    z-index: -1;
+}
+
+.day-bar {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+}
+
+.weather-tooltip {
+    display: none;
+    position: absolute;
+    background-color: var(--background);
+    border: 1px solid var(--border);
+    pointer-events: none;
+    text-align: left;
+    padding: 1em 1em;
+    box-sizing: border-box;
+    width: 250px;
+    z-index: 3;
+}
+
+.tooltip-header {
+    margin: .5em;
+    text-align: center;
+    font-weight: bold;
+}
+
+.tooltip-data {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.blanket-key {
+    width: 2.5vw;
+    position: absolute;
+    transition: 1s;
+    opacity: 15%;
+    left: 0;
+}
+
+#heat-key {
+    height: 80vh;
+    background-image: linear-gradient(0deg, #2c48b8, #429bd6 18.87%, #6bbcd1 26.98%, #9ad0db 36.32%, #bddbd5 50.47%, #fff2ce 60.85%, #f3b938 65.57%, #ffa42e 70.24%, #fd9415 73.07%, #eb6f02 74.53%, #eb6702 79.25%, #d95700 85.85%, #962101 91.51%, #480300 97.17%, #080000);
+}
+
+#degrees-wrapper {
+    margin-left: 2vw;
+}
+
+#precip-key {
+    height: 40vh;
+    background-color: #2c48b8;
+    top: 80vh;
+    border-radius: 0 0 2.5vw 2.5vw;
+}
+
+.heat-tic, .precip-tic {
+    position: absolute;
+    width: 1vw;
+    left: 0;
+    transition: 1s;
+    margin-top: 0;
+    margin-bottom: 0;
+    opacity: 20%;
+}
+
+#heat-key-wrapper{
+    opacity: 0%;
+    transition: 1s;
+    height: 80vh;
+    text-align: right;
+    position: relative;
+    margin-top: 2px;
+}
+
+#precip-key-wrapper {
+    position: absolute;
+    opacity: 0%;
+    transition: 1s;
+    top: 80vh;
+    height: 40vh;
+    text-align: right;
+}
+
+#precip-tic-wrapper{
+    width: 5vw;
+    height: 100%;
+    position: absolute;
+}
+
+#inch-wrapper {
+    margin-left: 2vw;
+}
+
+.units {
+    position: absolute;
+    margin: 0;
+    font-size: 14px;
+    text-align: left;
+    width: 50px;
+}
+
+#key-wrapper {
+    position: relative;
+    display: flex;
+    height: 125vh;
+    width: 10vw;
+    transition: 1s;
+}
+
+#key-icon {
+    background-image: url("../images/key.png");
+    background-size: cover;
+    height: 8vw;
+    max-height: max(10vh, 4vw);
+    min-height: 5vh;
+    aspect-ratio: 5/8;
+    position: absolute;
+    top: calc(50% - min(2.5vw, 4vw));
+    cursor: pointer;
+    z-index: -40;
+    opacity: 70%;
+    left: 2.5vw;
+    transition: 1s;
+}
+
+#weather-page-wrapper {
+    display: flex;
+    justify-content: left;
+    margin-bottom: 5vh;
+}
+
+#weather-bars {
+    display: flex;
+    height: 100%;
+    width: 80vw;
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 1;
+}
+
+#key-wrapper:hover {
+    width: 18vw;
+}
+
+#weatherblanket-info-button {
+    position: absolute;
+    right: 5px;
+    top: 5pxem;
+}
+
+#key-wrapper:hover > .blanket-key{
+    width: 5vw;
+    opacity: 100%;
+}
+
+#key-wrapper:hover .precip-tic {
+    width: 95vw;
+}
+
+#heat-tic-wrapper {
+    width: 5vw;
+    height: 80vh;
+    position: absolute;
+}
+
+#key-wrapper:hover #key-icon {
+    opacity: 0%;
+}
+
+#key-wrapper:hover ~ #blankets {
+    transform: translateX(9vw);
+}
+
+#key-wrapper:hover #heat-key-wrapper, #key-wrapper:hover #precip-key-wrapper {
+    transform: translateX(calc(5vw));
+    opacity: 100%;
+}
+
+#key-wrapper:hover #key-wrapper:hover {
+    transform: translateX(5vw);
+}
+
+#rainblanket {
+    height:40vh;
+    width: 80vw;
+    margin:auto;
+    margin-bottom: 20px;
+    position: relative;
+}
+
+#rainbox {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    display: flex;
+}
+
+#blanket-text {
+    font-weight: bold;
+    z-index: 1;
+    max-width: 80%;
+    margin: auto;
+    margin-top: 82vh;
+    font-size: 16px;
+    top: calc(80vh + 50px);
+    left: 10%;
+    transition: 1s;
+    grid-column: 1;
+    grid-row: 1;
+    opacity: 60%;
+    background-color: var(--background);
+    box-shadow: 0 0 5px 5px var(--background);
+  }
+
+  #blanket-text:hover {
+    opacity: 100% !important;
+  }
+
+.tooltip {
+    width: fit-content;
+    height: fit-content;
+    padding: 15px;
+    background-color: beige;
+    white-space: nowrap;
+    font-family: 'montserrat'
+}
+
+.tooltip-header {
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: -3px;
+}
+
+#threeBlanket {
+    position: relative; 
+    margin: auto;
+    margin-top: 5vh;
+    outline: none;
+    display: none;
+    width: 90vw;
+    height: 100vh;
+
+}
+
+#three-button {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
