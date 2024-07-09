@@ -26,6 +26,20 @@
     font-family: arial;
     background-color: var(--container-back);
   }
+
+  #toolbar {
+    display: flex;
+    gap: 1em;
+    padding: 1em;
+    width: auto;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .year-slider {
+    width: 200px;
+    margin: 1em;
+  }
   
   #portrait-overlay {
     position: fixed;

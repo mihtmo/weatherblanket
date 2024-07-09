@@ -1,13 +1,20 @@
 import { heatColorScale, rainScale } from "../helpers/colorScale"
 import "./WeatherBars.css"
+import WeatherYearSVG from "./WeatherBarSVG"
 
-export const WeatherBars = ({ blanketData }) => {
-    console.log(blanketData.days)
+export const WeatherBars = ({ blanketData, selectedYears }) => {
+    const weatherBarYears = []
+    console.log(selectedYears)
     return (
         <div id='weather-bars'>
-            { blanketData.days.map((data, i) => {
-                return (<DayBar data={data} dayNum={i + 1} maxRain={blanketData.maxRain}/>)
-            }) }
+            {selectedYears.map((year) => {
+                return (
+                    <div key={`year-${year}-wrapper`} className='year-data-svg'>
+                        <WeatherYearSVG year={year} yearData={blanketData[year]}/>
+                    </div>
+                )
+            })}
+
         </div>
     )
 }

@@ -10,23 +10,27 @@ CORS(app, support_credentials=True)
 @cross_origin(supports_credentials=True)
 def get_weather_data():
     data = request.get_json()
-    requested_year = data['year']
+    requested_years = data['years']
     current_year = date.today().year
-    if requested_year == None:
-        requested_year = current_year
+    start_date = ""
     end_date = ""
-    # If the requested year is this year, end_date is today
-    if current_year == requested_year:
+    # If requested_years are None, use current year
+    if requested_years == None:
+        requested_years = [current_year, current_year]
+    # If end year is current year, use current date as end date
+    if requested_years[1] == current_year:
         end_date = date.today()
-    # If not, use whole year
+    # Else, use end of the last requested year as end_year
     else:
-        end_date = date(int(requested_year), 12, 31)
-    today = date.today()
-    # start_date is beginning of requested_year
-    start_date = date(int(requested_year), 1, 1)
+        end_date = date(int(requested_years[1]), 12, 31)
+
+    # print(requested_years)
+    start_date = date(int(requested_years[0]), 1, 1)
 
     # Make array with space for full year
     weather_data = [None] * 365
+    
+    # print(start_date, end_date)
     
     # Connect to NCEI API for 2022
     site = "https://www.ncei.noaa.gov/access"
@@ -35,11 +39,12 @@ def get_weather_data():
 
     response = get("{}{}".format(site, endpoint))
     response = response.json()
+    # print(response)
 
     for i in range(len(response)):
         weather_data[i] = response[i]
     
-    print(weather_data)
+    # print(weather_data)
     # Intialize list for calculating max rain
     rain_list = []
     

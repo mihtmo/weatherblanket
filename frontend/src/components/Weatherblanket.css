@@ -13,7 +13,7 @@
     position:absolute;
     width: 80vw;
     height: 80vh;
-    background-image: url("../images/simple-texture.png");
+    /* background-image: url("../images/simple-texture.png"); */
     background-size: auto;
     pointer-events: none;
     opacity: 50%;
@@ -23,7 +23,7 @@
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
-    transition: 1s;
+    /* transition: 1s; */
     width: 80vw;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, auto));
@@ -75,7 +75,7 @@
 .blanket-key {
     width: 2.5vw;
     position: absolute;
-    transition: 1s;
+    /* transition: 1s; */
     opacity: 15%;
     left: 0;
 }
@@ -100,7 +100,7 @@
     position: absolute;
     width: 1vw;
     left: 0;
-    transition: 1s;
+    /* transition: 1s; */
     margin-top: 0;
     margin-bottom: 0;
     opacity: 20%;
@@ -108,8 +108,8 @@
 
 #heat-key-wrapper{
     opacity: 0%;
-    transition: 1s;
-    height: 80vh;
+    /* transition: 1s; */
+    height: calc(90vh - 90px);
     text-align: right;
     position: relative;
     margin-top: 2px;
@@ -118,7 +118,7 @@
 #precip-key-wrapper {
     position: absolute;
     opacity: 0%;
-    transition: 1s;
+    /* transition: 1s; */
     top: 80vh;
     height: 40vh;
     text-align: right;
@@ -134,6 +134,13 @@
     margin-left: 2vw;
 }
 
+.year-data-svg {
+    width: 100%;
+    height: 100%;
+    grid-column: 1;
+    flex: 1;
+}
+
 .units {
     position: absolute;
     margin: 0;
@@ -145,9 +152,9 @@
 #key-wrapper {
     position: relative;
     display: flex;
-    height: 125vh;
+    height: 100%;
     width: 10vw;
-    transition: 1s;
+    /* transition: 1s; */
 }
 
 #key-icon {
@@ -163,22 +170,13 @@
     z-index: -40;
     opacity: 70%;
     left: 2.5vw;
-    transition: 1s;
+    /* transition: 1s; */
 }
 
 #weather-page-wrapper {
     display: flex;
     justify-content: left;
     margin-bottom: 5vh;
-}
-
-#weather-bars {
-    display: flex;
-    height: 100%;
-    width: 80vw;
-    grid-column: 1;
-    grid-row: 1;
-    z-index: 1;
 }
 
 #key-wrapper:hover {
@@ -247,7 +245,7 @@
     font-size: 16px;
     top: calc(80vh + 50px);
     left: 10%;
-    transition: 1s;
+    /* transition: 1s; */
     grid-column: 1;
     grid-row: 1;
     opacity: 60%;
