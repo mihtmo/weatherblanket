@@ -9,7 +9,7 @@ export const WeatherBars = ({ blanketData, selectedYears }) => {
     const [isLoading, multiYear, dataType] = useContext(PageStateContext);
     console.log(dataType)
     return (
-        <div id='weather-bars'>
+        <div id='weather-bars' className='shadowed'>
             {isLoading ? 
                 <BarLoader/>
                 :

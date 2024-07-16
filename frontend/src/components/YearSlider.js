@@ -18,6 +18,7 @@ const YearSlider = ( { id, multiYear, currentYear, handler, start }) => {
                 step={1}
                 onSlide={handler}
                 connect 
+                behaviour="drag"
                 pips={{ mode: 'steps', density: 3, filter: pipsFilter }} />
         </div>
     )

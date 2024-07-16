@@ -30,6 +30,7 @@ const App = () => {
 
     function handleMultiYearToggle(e) {
         if (e.target.checked) {
+            console.log(selectedYears[0])
             setMultiYear(true);
             setSelectedYears(unfoldYears([selectedYears[0], currentYear]))
             setDataType('heat');
@@ -170,11 +171,16 @@ const App = () => {
         <div>
             <p>
                 This is an artistic representation of temperatures and precipitation 
-                levels in Austin, TX for the past 365 days. The color of the bars 
-                correspond to the maximum daily temperature (at the top) and the 
-                minimum daily temperature (at the bottom). The drips below the bars 
-                indicate precipitation levels for that day. The data for this graphic 
-                is coming directly from the NCEI API for Camp Mabry.
+                levels in Austin, TX. The color of the bars correspond to the maximum 
+                daily temperature (at the top) and the minimum daily temperature 
+                (at the bottom). The drips below the bars indicate precipitation 
+                evels for that day. The data for this graphic is coming directly 
+                from the NCEI API for Camp Mabry.
+            </p>
+            <p>
+                Toggling the visual to multi-year mode allows you to select multiple
+                years of data to tile together and compare! In this mode, you're able
+                to switch between temperature and precipitation data.
             </p>
             <p>
                 Try hovering over the main graphic or the key on the left for more 
@@ -199,40 +205,39 @@ const App = () => {
                         <div id='weatherblanket-title' className='title'> Weatherblanket </div>
                         <InfoButton id='weatherblanket-info-button' title={'Weatherblanket'} body={infoBodyText} />
                     </div>
+                    <div id='toolbar' className='shadowed'>
+                        <CustomToggle
+                            id='multi-year-toggle' 
+                            leftText='single-year' 
+                            rightText='multi-year'
+                            handler={handleMultiYearToggle}
+                            defaultOn={true}/>
+                        <CustomToggle
+                            id='data-type-toggle'
+                            leftText='heat'
+                            rightText='rain'
+                            handler={handleTypeSelect}
+                            disabled={!multiYear}/>
+                        { multiYear ? 
+                            <YearSlider
+                                key={2}
+                                id={'multi-year-slider'}
+                                multiYear={true} 
+                                start={ [selectedYears[0], selectedYears[selectedYears.length - 1]]}
+                                currentYear={currentYear}
+                                handler={handleSliderChange}/>
+                            :
+                            <YearSlider
+                                key={1}
+                                id={'single-year-slider'}
+                                currentYear={currentYear}
+                                start={[ selectedYears[selectedYears.length - 1] ]}
+                                handler={handleSliderChange}/>
+                        }
+                    </div>
                     <WeatherBlanket blanketData={blanketData} selectedYears={selectedYears}/>
                 </div>
             </PageStateContextProvider>
-            <div id='toolbar'>
-                <CustomToggle
-                    id='multi-year-toggle' 
-                    leftText='single-year' 
-                    rightText='multi-year'
-                    handler={handleMultiYearToggle}
-                    defaultOn={true}/>
-                { multiYear &&
-                    <CustomToggle
-                        id='data-type-toggle'
-                        leftText='heat'
-                        rightText='rain'
-                        handler={handleTypeSelect}/>
-                }
-                { multiYear ? 
-                    <YearSlider
-                        key={2}
-                        id={'multi-year-slider'}
-                        multiYear={true} 
-                        start={ [currentYear - 2, currentYear]}
-                        currentYear={currentYear}
-                        handler={handleSliderChange}/>
-                    :
-                    <YearSlider
-                        key={1}
-                        id={'single-year-slider'}
-                        currentYear={currentYear}
-                        start={[ currentYear ]}
-                        handler={handleSliderChange}/>
-                }
-            </div>
         </div>
     )
 }

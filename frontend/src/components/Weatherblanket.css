@@ -13,7 +13,7 @@
     user-select: none; /* Standard syntax */
     /* transition: 1s; */
     /* height: calc(90vh - 90px); */
-    width: 80vw;
+    /* width: 80vw; */
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(100px, auto));
     /* height: calc(92vh - 198px); */
@@ -165,7 +165,7 @@
     flex-direction: column;
     display: flex;
     align-items: center;
-    /* margin-bottom: 1em; */
+    margin-bottom: 30px;
     /* margin-top: 1em; */
     /* height: calc(90vh - 80px); */
 }

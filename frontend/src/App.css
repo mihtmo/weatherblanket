@@ -29,22 +29,42 @@
 
   #toolbar {
     display: flex;
-    gap: 2em;
     width: auto;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-    height: 80px;
+    width: fit-content;
+    max-width: 80vw;
+    padding: 1em;
+    background: var(--container-fore);
+    border-radius: 10px;
+    margin-bottom: 1em;
+  }
+
+  .shadowed {
+    box-shadow: 0px 2px 6px var(--container-shadow);
   }
 
   .year-slider {
     width: 250px;
-    margin: 1em;
+    margin: 1em 2em 1em 1em;
     min-width: 250px;
   }
 
+  .noUi-connect {
+    background: var(--fill-color) !important;
+}
+
   .noUi-value {
     margin-top: 5px;
+  }
+
+  .noUi-pips-horizontal {
+    padding: 5px 0 !important;
+  }
+
+  .noUi-handle {
+    box-shadow: inset 0 0 1px var(--container-shadow), inset 0 1px 7px var(--container-shadow), 0 3px 6px -3px var(--container-shadow) i9m !important;
   }
   
   #portrait-overlay {
