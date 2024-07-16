@@ -36,8 +36,12 @@ export function heatColorScale(temp){
 
 // Get relative length of rain scale given amount and max
 export function rainScale(amount, max){
-    const coef = (amount/max);
-    return coef;
+    if (amount == 99.99) {
+        return 0
+    } else {
+        const coef = (amount/max);
+        return coef;
+    }
 }
 
 // function rainMMConvert(p, m){

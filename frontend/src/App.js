@@ -6,80 +6,83 @@ import "./App.css"
 import InfoButton from "./components/InfoButton";
 import CustomToggle from "./components/CustomToggle";
 import YearSlider from "./components/YearSlider";
+import getDayOfTheYear from "./helpers/dayOfTheYear";
+import { PageStateContextProvider } from "./contexts/PageStateContext";
 
 const App = () => {
     const currentYear = new Date().getFullYear();
     const [blanketData, setBlanketData] = useState(null);
-    const [selectedYears, setSelectedYears] = useState([currentYear]);
+    const [selectedYears, setSelectedYears] = useState([currentYear - 2, currentYear - 1, currentYear]);
     const [isDarkTheme, setIsDarkTheme] = useState(
         window.matchMedia("(prefers-color-scheme: dark)").matches
     );
-    const [multiYear, setMultiYear] = useState(false);
-    const [dataType, setDataType] = useState('both');
+    const [multiYear, setMultiYear] = useState(true);
+    const [dataType, setDataType] = useState('heat');
+    const [isLoading, setIsLoading] = useState(true);
 
-    function handleYearChange(e) {
-        setSelectedYears(e.target.value)
+    function unfoldYears(years) {
+        let selectedYearsList = [];
+        for (let i = years[0]; i <= years[1]; i++) {
+            selectedYearsList.push(parseInt(i))
+        }
+        return selectedYearsList;
     }
 
     function handleMultiYearToggle(e) {
         if (e.target.checked) {
             setMultiYear(true);
+            setSelectedYears(unfoldYears([selectedYears[0], currentYear]))
             setDataType('heat');
         } else {
             setMultiYear(false);
+            setSelectedYears([selectedYears[0]])
             setDataType('both');
         }
     }
 
     function handleTypeSelect(e) {
-        setDataType(e.target.value)
+        if (e.target.checked) {
+            setDataType('rain');
+        } else {
+            setDataType('heat');
+        }
     }
 
-    // useEffect(() => {
-    //     console.warn(selectedYears);
-    //     if (selectedYears) {
-    //         for (let i = selectedYears[0]; i <= selectedYears[selectedYears.length - 1]; i++) {
-    //             if (!blanketData || (!blanketData[i])) {
-    //                 getWeatherData(i)
-    //                 console.log(`retrieving data for ${i}`)
-    //             } else if (i in blanketData) {
-    //                 return
-    //             }
-    //         }
-    //     }
-    // }, [selectedYears])
-
     const getAllWeatherData = async () => {
+
+        setIsLoading(true);
+
         const localData = JSON.parse(localStorage.getItem('weatherData'));
         if (localData) {
             console.log('look what I found', localData)
             setBlanketData(localData)
+            setIsLoading(false);
         } else {
-            const allYears = Array.from({ length: currentYear - 1999 }, (_, index) => index + 2000);
-            let allYearsData = {};
-            for (let i = allYears[allYears.length - 1]; i >= allYears[0]; i--) {
-                console.warn(i)
-                let endDate = ''
-                if (i == currentYear) {
-                    endDate = new Date().toJSON().slice(0, 10);
-                } else {
-                    endDate = `${i}-12-31`
-                }
-                let startDate = `${i}-01-01`
-                const response = await axios.get(
-                    `https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-summary-of-the-day&stations=72254413958&startDate=${startDate}&endDate=${endDate}&dataTypes=MAX,MIN,PRCP&format=json`
-                )
-                let dataArray = await response.data
-                if (dataArray.length !== 366) {
-                    dataArray.push(...Array(366 - dataArray.length).fill(null));
-                    console.log("not a full year of data, adding blanks to end")
-                }
-                allYearsData[i] = {'days': dataArray}
+            const todaysDate = new Date().toJSON().slice(0, 10);
+            const response = await axios.get(
+                `https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-summary-of-the-day&stations=72254413958&startDate=${'2000-01-01'}&endDate=${todaysDate}&dataTypes=MAX,MIN,PRCP&format=json`
+            )
+            let dataArray = await response.data
+            let allYearsData = {}
+            for (let i = 2000; i <= currentYear; i++) {
+                allYearsData[i] = {}
+                allYearsData[i]['days'] = Array(366).fill(null);
+            }
+            console.warn(allYearsData, "ACL")
+            for (let day in dataArray) {
+                console.log(dataArray[day])
+                const date = dataArray[day]['DATE']
+                let dayNumber = getDayOfTheYear(`${date}T00:00`);
+                console.log(dayNumber)
+                console.warn('dayNumber:', dayNumber, 'day:', dataArray[day]['DATE'])
+                allYearsData[date.slice(0, 4)]['days'][dayNumber-1] = dataArray[day]
             }
             console.log(JSON.stringify(allYearsData))
             localStorage.setItem('weatherData', JSON.stringify(allYearsData));
             setBlanketData(allYearsData)
+            setIsLoading(false);
         }
+
     }
 
     // const getWeatherData = async ( years ) => {
@@ -150,12 +153,7 @@ const App = () => {
             setSelectedYears([parseInt(value)])
         // Else return range of two
         } else {
-            let selectedYearsList = [];
-            for (let i = value[0]; i < value[1]; i++) {
-                selectedYearsList.push(parseInt(i))
-            }
-            selectedYearsList.push(parseInt(value[1]))
-            setSelectedYears(selectedYearsList)
+            setSelectedYears(unfoldYears([value[0], value[1]]))
         }
     }
 
@@ -189,26 +187,41 @@ const App = () => {
     )
 
     return (
-        <div className='theme-wrapper' data-theme={isDarkTheme?'dark':'light'}>
-            <InfoButton id='weatherblanket-info-button' title={'Weatherblanket'} body={infoBodyText} />
+        <div 
+            id='weather-page-wrapper' 
+            className='theme-wrapper' 
+            data-theme={isDarkTheme?'dark':'light'}
+            >
             {/* <button onClick={getWeatherData}></button> */}
+            <PageStateContextProvider value={[isLoading, multiYear, dataType]}>
+                <div id='display-and-header-wrapper'>
+                    <div id='weatherblanket-header'>
+                        <div id='weatherblanket-title' className='title'> Weatherblanket </div>
+                        <InfoButton id='weatherblanket-info-button' title={'Weatherblanket'} body={infoBodyText} />
+                    </div>
+                    <WeatherBlanket blanketData={blanketData} selectedYears={selectedYears}/>
+                </div>
+            </PageStateContextProvider>
             <div id='toolbar'>
-                <CustomToggle 
+                <CustomToggle
                     id='multi-year-toggle' 
                     leftText='single-year' 
                     rightText='multi-year'
-                    handler={handleMultiYearToggle}/>
-                {/* <select onChange={handleYearChange}>
-                    {years.map((year) => {
-                        return ( <option value={year}> {year} </option>)
-                    })}
-                </select> */}
+                    handler={handleMultiYearToggle}
+                    defaultOn={true}/>
+                { multiYear &&
+                    <CustomToggle
+                        id='data-type-toggle'
+                        leftText='heat'
+                        rightText='rain'
+                        handler={handleTypeSelect}/>
+                }
                 { multiYear ? 
                     <YearSlider
                         key={2}
                         id={'multi-year-slider'}
                         multiYear={true} 
-                        start={ [2010, 2024]}
+                        start={ [currentYear - 2, currentYear]}
                         currentYear={currentYear}
                         handler={handleSliderChange}/>
                     :
@@ -219,22 +232,6 @@ const App = () => {
                         start={[ currentYear ]}
                         handler={handleSliderChange}/>
                 }
-                { multiYear &&
-                    <CustomToggle
-                        id='data-type-toggle'
-                        leftText='heat'
-                        rightText='rain'
-                        handler={handleTypeSelect}/>
-                }
-            </div>
-            <div id='weather-page-wrapper'>
-                <div id='key-wrapper'>
-                    <HeatKey/>
-                    { (multiYear && dataType == 'rain') &&
-                        <PrecipKey/>
-                    }
-                </div>
-                { (blanketData && selectedYears) && <WeatherBlanket blanketData={blanketData} selectedYears={selectedYears} /> }
             </div>
         </div>
     )

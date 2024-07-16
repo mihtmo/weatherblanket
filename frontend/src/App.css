@@ -29,16 +29,22 @@
 
   #toolbar {
     display: flex;
-    gap: 1em;
-    padding: 1em;
+    gap: 2em;
     width: auto;
     align-items: center;
     justify-content: center;
+    flex-wrap: wrap;
+    height: 80px;
   }
 
   .year-slider {
-    width: 200px;
+    width: 250px;
     margin: 1em;
+    min-width: 250px;
+  }
+
+  .noUi-value {
+    margin-top: 5px;
   }
   
   #portrait-overlay {
@@ -80,6 +86,17 @@
       animation: App-logo-spin infinite 20s linear;
     }
   } */
+
+  #weather-page-wrapper {
+    font-weight: 400;
+  }
+
+  #weatherblanket-header {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .5em;
+  }
   
   .details-icon .sound-source-icon{
     height: 20px;
@@ -159,9 +176,8 @@
   }
   
   .title {
-    font-size: 1.5em;
-    letter-spacing: .5em;
-    font-weight: 400;
+    font-size: 1em;    
+    font-weight: 300;
     font-style: normal;
   }
   
