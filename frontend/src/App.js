@@ -7,61 +7,50 @@ import InfoButton from "./components/InfoButton";
 import CustomToggle from "./components/CustomToggle";
 import YearSlider from "./components/YearSlider";
 import getDayOfTheYear from "./helpers/dayOfTheYear";
-import { PageStateContextProvider } from "./contexts/PageStateContext";
+import { PageParamsContextProvider } from "./contexts/PageParamsContext";
+import LightOrDarkIcon from "./components/LightOrDarkIcon";
+import isMobileBrowser from "./helpers/isMobileBrowser.js";
+import RotateIcon from "./components/RotateIcon";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
+import Sidebar from "./components/Sidebar.js"
 
 const App = () => {
-    const currentYear = new Date().getFullYear();
+    const currentYear = new Date().getUTCFullYear();
     const [blanketData, setBlanketData] = useState(null);
-    const [selectedYears, setSelectedYears] = useState([currentYear - 2, currentYear - 1, currentYear]);
     const [isDarkTheme, setIsDarkTheme] = useState(
         window.matchMedia("(prefers-color-scheme: dark)").matches
     );
-    const [multiYear, setMultiYear] = useState(true);
-    const [dataType, setDataType] = useState('heat');
     const [isLoading, setIsLoading] = useState(true);
+    const [isLandscapeMode, setIsLandscapeMode] = useState(
+        !window.matchMedia("(orientation: portrait)").matches
+    );
+    const [mobileUser, setMobileUser] = useState(isMobileBrowser());
+    const [toolbarParams, setToolbarParams] = useState({
+        'multiYear': true,
+        'dataType': 'heat',
+        'selectedStation': '72254413958',
+        'selectedYears': [currentYear - 2, currentYear - 1, currentYear]
+    })
 
-    function unfoldYears(years) {
-        let selectedYearsList = [];
-        for (let i = years[0]; i <= years[1]; i++) {
-            selectedYearsList.push(parseInt(i))
-        }
-        return selectedYearsList;
-    }
-
-    function handleMultiYearToggle(e) {
-        if (e.target.checked) {
-            console.log(selectedYears[0])
-            setMultiYear(true);
-            setSelectedYears(unfoldYears([selectedYears[0], currentYear]))
-            setDataType('heat');
-        } else {
-            setMultiYear(false);
-            setSelectedYears([selectedYears[0]])
-            setDataType('both');
-        }
-    }
-
-    function handleTypeSelect(e) {
-        if (e.target.checked) {
-            setDataType('rain');
-        } else {
-            setDataType('heat');
-        }
+    // Change theme (todo: this could be smarter)
+    function handleThemeChange() {
+        setIsDarkTheme(!isDarkTheme)
     }
 
     const getAllWeatherData = async () => {
 
         setIsLoading(true);
 
-        const localData = JSON.parse(localStorage.getItem('weatherData'));
+        const localData = JSON.parse(localStorage.getItem(toolbarParams['selectedStation']));
         if (localData) {
-            console.log('look what I found', localData)
+            console.log('found data in storage')
             setBlanketData(localData)
             setIsLoading(false);
         } else {
             const todaysDate = new Date().toJSON().slice(0, 10);
             const response = await axios.get(
-                `https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-summary-of-the-day&stations=72254413958&startDate=${'2000-01-01'}&endDate=${todaysDate}&dataTypes=MAX,MIN,PRCP&format=json`
+                `https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-summary-of-the-day&stations=${toolbarParams['selectedStation']}&startDate=${'2000-01-01'}&endDate=${todaysDate}&dataTypes=MAX,MIN,PRCP&format=json`
             )
             let dataArray = await response.data
             let allYearsData = {}
@@ -69,96 +58,27 @@ const App = () => {
                 allYearsData[i] = {}
                 allYearsData[i]['days'] = Array(366).fill(null);
             }
-            console.warn(allYearsData, "ACL")
             for (let day in dataArray) {
-                console.log(dataArray[day])
                 const date = dataArray[day]['DATE']
                 let dayNumber = getDayOfTheYear(`${date}T00:00`);
-                console.log(dayNumber)
-                console.warn('dayNumber:', dayNumber, 'day:', dataArray[day]['DATE'])
+                // console.warn('dayNumber:', dayNumber, 'day:', dataArray[day]['DATE'])
                 allYearsData[date.slice(0, 4)]['days'][dayNumber-1] = dataArray[day]
             }
-            console.log(JSON.stringify(allYearsData))
-            localStorage.setItem('weatherData', JSON.stringify(allYearsData));
+            localStorage.setItem(toolbarParams['selectedStation'], JSON.stringify(allYearsData));
             setBlanketData(allYearsData)
             setIsLoading(false);
         }
-
     }
-
-    // const getWeatherData = async ( years ) => {
-        
-        
-    //     let endDate = ''
-    //     if (year == currentYear) {
-    //         endDate = new Date().toJSON().slice(0, 10);
-    //     } else {
-    //         endDate = `${year}-12-31`
-    //     }
-    //     let startDate = `${year}-01-01`
-
-    //     const response = await axios.get(
-    //         `https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-summary-of-the-day&stations=72254413958&startDate=${'2000-01-01'}&endDate=${'2024-12-31'}&dataTypes=MAX,MIN,PRCP&format=json`
-    //     ).catch(function (err) {
-    //         if (err) {
-    //             console.log(err);
-    //         }
-    //     })
-
-    //     let dataArray = response.data
-    //     console.log(dataArray)
-    //     if (dataArray.length !== 366) {
-    //         console.warn(dataArray.length)
-    //         dataArray.push(...Array(366 - dataArray.length).fill(null));
-    //         console.log("not a full year of data, adding blanks to end")
-    //     }
-    //     setBlanketData({
-    //         ...blanketData,
-    //         [year]: {
-    //             'days': dataArray,
-    //             'maxRain': 2
-    //         }
-    //     })
-    // }
 
     // On first load, get this years data from API
     useEffect(() => {
-        // getWeatherData(['2000', currentYear])
-
-        // axios({
-        //     method: 'POST',
-        //     url: 'http://localhost:5000/get-weather-data', 
-        //     data: { years: selectedYears },
-        //     headers: {
-        //         Accept: 'application/json',
-        //         "Content-Type": "application/json;charset=UTF-8",
-        //     },
-        // })
-        // .then(({data}) => {
-        //     setBlanketData({
-        //         'days': data.days,
-        //         'maxRain': data.maxRain
-        //     })
-        // })
         getAllWeatherData()
-    }, [])
+    }, [toolbarParams['selectedStation']])
 
     // Change theme (todo: this could be smarter)
     function handleThemeChange() {
         setIsDarkTheme(!isDarkTheme)
     }
-
-    function handleSliderChange(value) {
-        // If selecting single year, set both years to same
-        if (value.length === 1) {
-            setSelectedYears([parseInt(value)])
-        // Else return range of two
-        } else {
-            setSelectedYears(unfoldYears([value[0], value[1]]))
-        }
-    }
-
-    console.log(selectedYears)
 
     // Set overall body-element background-color based on CSS variable
     // This is done to prevent different background on scroll
@@ -167,30 +87,7 @@ const App = () => {
         document.body.style.backgroundColor = backgroundColor;
     }, [isDarkTheme])
 
-    const infoBodyText = (
-        <div>
-            <p>
-                This is an artistic representation of temperatures and precipitation 
-                levels in Austin, TX. The color of the bars correspond to the maximum 
-                daily temperature (at the top) and the minimum daily temperature 
-                (at the bottom). The drips below the bars indicate precipitation 
-                evels for that day. The data for this graphic is coming directly 
-                from the NCEI API for Camp Mabry.
-            </p>
-            <p>
-                Toggling the visual to multi-year mode allows you to select multiple
-                years of data to tile together and compare! In this mode, you're able
-                to switch between temperature and precipitation data.
-            </p>
-            <p>
-                Try hovering over the main graphic or the key on the left for more 
-                information!
-            </p>
-            <p>
-                This visual is best viewed on desktop or in landscape-mode.
-            </p>
-        </div>
-    )
+    console.log(blanketData)
 
     return (
         <div 
@@ -198,46 +95,84 @@ const App = () => {
             className='theme-wrapper' 
             data-theme={isDarkTheme?'dark':'light'}
             >
+            { (mobileUser && !isLandscapeMode) && (
+                <div id='portrait-overlay'> 
+                    <div id='overlay-text-wrapper'>
+                        <div> this app was designed for landscape mode </div>
+                        <RotateIcon/>
+                        <div> please rotate your device </div>
+                    </div>
+                </div>
+            )}
             {/* <button onClick={getWeatherData}></button> */}
-            <PageStateContextProvider value={[isLoading, multiYear, dataType]}>
+            <PageParamsContextProvider value={[isLoading, toolbarParams, setToolbarParams]}>
                 <div id='display-and-header-wrapper'>
                     <div id='weatherblanket-header'>
-                        <div id='weatherblanket-title' className='title'> Weatherblanket </div>
-                        <InfoButton id='weatherblanket-info-button' title={'Weatherblanket'} body={infoBodyText} />
+                        <div id='weatherblanket-title' className='title'> 
+                            <h1> Weatherblanket </h1>
+                        </div>
+                        <LightOrDarkIcon
+                            isDarkTheme={isDarkTheme}
+                            clickHandler={handleThemeChange}/>
                     </div>
-                    <div id='toolbar' className='shadowed'>
-                        <CustomToggle
-                            id='multi-year-toggle' 
-                            leftText='single-year' 
-                            rightText='multi-year'
-                            handler={handleMultiYearToggle}
-                            defaultOn={true}/>
-                        <CustomToggle
-                            id='data-type-toggle'
-                            leftText='heat'
-                            rightText='rain'
-                            handler={handleTypeSelect}
-                            disabled={!multiYear}/>
-                        { multiYear ? 
-                            <YearSlider
-                                key={2}
-                                id={'multi-year-slider'}
-                                multiYear={true} 
-                                start={ [selectedYears[0], selectedYears[selectedYears.length - 1]]}
-                                currentYear={currentYear}
-                                handler={handleSliderChange}/>
-                            :
-                            <YearSlider
-                                key={1}
-                                id={'single-year-slider'}
-                                currentYear={currentYear}
-                                start={[ selectedYears[selectedYears.length - 1] ]}
-                                handler={handleSliderChange}/>
-                        }
+                    <div id='charts-and-menu-wrapper' className='canvases'>
+                        <WeatherBlanket blanketData={blanketData}/>
+                        <Sidebar/>
                     </div>
-                    <WeatherBlanket blanketData={blanketData} selectedYears={selectedYears}/>
+                    <div className='description-wrapper'>
+                        <p> 
+                            Weatherblanket was created as a way to depict local
+                            weather data in a visually striking and easily
+                            digestible way.
+                        </p>
+                        <p> 
+                            If you haven't heard of them, I recommend giving 
+                            "weatherblanket" a google—they're gorgeous. 
+                            Weatherblankets are created by recording the high 
+                            temperature of the day, assigning a color to it, 
+                            and knitting/crocheting a row of that color onto a 
+                            blanket to create visual map of temperature 
+                            throughout the year.
+                        </p>
+                        <p>
+                            I found this concept delightful when I first saw it, 
+                            and wanted to give myself access to this kind of 
+                            visualization for my own city (Austin), especially
+                            considering the weather events we had been having. 
+                            As I currently have no knitting skills, my thoughts 
+                            turned to a digital visualization.
+                        </p>
+                        <p>
+                            True to the original concept, each bar in the
+                            visualization (from left to right) corresponds to
+                            a day of the year. The color at the top of each bar
+                            corresponds to the high temperature of the day, while
+                            the bottom corresponds to the low. If the 'single-year'
+                            option is selected on the visualization (see toolbar
+                            on the right of the tool), there will also be 'drips'
+                            at the bottom of the blanket. Each drip shows the
+                            precipitation for that day. In 'multi-year' mode,
+                            you can stack multiple years to examine their
+                            differences. In this mode, you can switch between
+                            a blanket depicting heat, and a blanket depicting
+                            precipitation.
+                        </p>
+                        <p>
+                            I'll leave the explanations there—do some exploring!
+                        </p>
+                        <p>
+                            This is the second version of this tool! &nbsp;
+                            <a href='https://www.mitchwebb.me/weatherblanket'>Check out the
+                            first version here.</a> I plan to
+                            add access to more cities and adjust the color-scale
+                            for the bars to allows for more insightful impressions.
+                        </p>
+                        <p>
+                            Thanks for taking a peek! (July 2024)
+                        </p>
+                    </div>
                 </div>
-            </PageStateContextProvider>
+            </PageParamsContextProvider>
         </div>
     )
 }

@@ -1,30 +1,87 @@
 import "./WeatherBars.css"
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { heatColorScale, rainScale } from "../helpers/colorScale";
 import BarLoader from "./loader";
-import PageStateContext from "../contexts/PageStateContext";
+import PageParamsContext from "../contexts/PageParamsContext";
+import * as d3 from 'd3-scale';
+import { XAxis } from "./Axes";
+import { Tooltip } from 'react-tooltip'
+import 'react-tooltip/dist/react-tooltip.css'
 
-export const WeatherBars = ({ blanketData, selectedYears }) => {
-    const reversedYears = [...selectedYears.slice().reverse()]
-    const [isLoading, multiYear, dataType] = useContext(PageStateContext);
-    console.log(dataType)
+export const WeatherBars = ({ blanketData }) => {
+    const [isLoading, toolbarParams, setToolbarParams] = useContext(PageParamsContext);
+    const reversedYears = [...toolbarParams.selectedYears.slice().reverse()];
+    const [chartDims, setChartDims] = useState({});
+    const chartRef = useRef();
+
+    const xDomain = [0, 12];
+    const xRange = [0 + 60, chartDims.width + 60];
+    const xValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ];
+    const xScale = d3.scaleLinear().domain(xDomain).range(xRange);
+    const valueMap = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
+
+    useEffect(() => {
+        if (chartRef.current) {
+            const resizeObserver = new ResizeObserver(() => {
+                const chart = chartRef.current;
+                const chartWidth = chart ? chart.getBoundingClientRect().width : null;
+                setChartDims({
+                    'width': chartWidth - 60,
+                })
+            }); 
+            resizeObserver.observe(chartRef.current);
+            return () => resizeObserver.disconnect();
+        }
+    }, [isLoading]);
+
     return (
-        <div id='weather-bars' className='shadowed'>
+        <div id='weather-bars' className='shadowed-inset' ref={chartRef}>
+            {(chartDims.width && !isLoading) && (
+                <XAxis
+                    values={xValues}
+                    domain={xDomain}
+                    range={xRange}
+                    scale={xScale}
+                    valueMap={valueMap}/>
+            )}
             {isLoading ? 
                 <BarLoader/>
                 :
                 reversedYears.map((year) => {
                     return (
-                        <div key={`year-${year}-wrapper`} className={`year-data-wrapper ${multiYear ? 'multi-year' : 'single-year'}`}>
-                            <div className='weather-year'>
-                                {(dataType == 'heat' || dataType == 'both') &&
-                                    <HeatYearSVG year={year} yearData={blanketData[year]} big={!multiYear}/>}
-                                {(dataType == 'rain' || dataType == 'both') &&
-                                    <RainYearSVG year={year} yearData={blanketData[year]} big={!multiYear}/>}
-                            </div>
+                        <div 
+                            key={`year-${year}-wrapper`} 
+                            className={`
+                                year-data-wrapper 
+                                ${toolbarParams.multiYear ? 
+                                    'multi-year' : 'single-year'}`
+                            }
+                        >
                             <div key={`weather-year-${year}-label`} className='weather-year-label'>
                                 {year}
                             </div>
+                            <div className='weather-year'>
+                                {(toolbarParams.dataType == 'heat' || 
+                                  toolbarParams.dataType == 'both') &&
+                                    <HeatYearSVG 
+                                        year={year} 
+                                        yearData={blanketData[year]} 
+                                        big={!toolbarParams.multiYear}
+                                    />}
+                                {(toolbarParams.dataType == 'rain' || 
+                                  toolbarParams.dataType == 'both') &&
+                                    <RainYearSVG 
+                                        year={year} 
+                                        yearData={blanketData[year]} 
+                                        big={!toolbarParams.multiYear}
+                                    />}
+                            </div>
+                            {/* {blanketData[year].days.map((day, i) => (
+                                day && <Tooltip 
+                                    key={day['DATE']}
+                                    id={`tooltip-year${year}-day${i}`}
+                                    className='weather-tooltip'/>
+                            ))} */}
                         </div>
                     )
                 })
@@ -39,50 +96,66 @@ const HeatYearSVG = ( {yearData, year, big} ) => {
     return (
         <svg 
             className='heat-year-svg'
-            viewBox={`0 0 366 50` }
+            viewBox={`0 0 366 50`}
             // shapeRendering="crispEdges"
             preserveAspectRatio="none">
-                {yearData.days.map((day, i) => (
-                    (day ? (
-                        <React.Fragment key={`heat-year-${year}-day${i}`}>
-                            <defs>
-                                <linearGradient
-                                    id={`heat-gradient-year${year}-day${i}`}
-                                    gradientTransform="rotate(90)">
-                                    <stop offset="0%" stopOpacity='100%' stopColor={heatColorScale(day['MAX'])}/>    
-                                    <stop offset="100%" stopOpacity='100%' stopColor={heatColorScale(day['MIN'])}/>   
-                                </linearGradient>
-                            </defs>
-                            <rect
-                                width={1}
-                                height={50}
-                                x={i}
-                                y={0}
-                                fill={`url(#heat-gradient-year${year}-day${i})`}>
-                            </rect>
-                        </React.Fragment>
-                    ) : (
+                {yearData.days.map((day, i) => {
+                    if (day) {
+                        // const tooltipHtml = (`
+                        // <div class='tooltip-wrapper'>
+                        //     <h3> ${day['DATE']} </h3>
+                        //     <ul>
+                        //         <li>High Temp: ${day['MAX'].trim()}&deg;F</li>
+                        //         <li>Low Temp: ${day['MIN'].trim()}&deg;F</li>
+                        //         <li>Precipitation: ${day['PRCP'].trim()} inches</li>
+                        //     </ul>
+                        // </div>
+                        // `)
+                        return (
+                            <React.Fragment 
+                                key={`heat-year-${year}-day${i}`}>
+                                <defs>
+                                    <linearGradient
+                                        id={`heat-gradient-year${year}-day${i}`}
+                                        gradientTransform="rotate(90)">
+                                        <stop offset="0%" stopOpacity='100%' stopColor={heatColorScale(day['MAX'])}/>    
+                                        <stop offset="100%" stopOpacity='100%' stopColor={heatColorScale(day['MIN'])}/>   
+                                    </linearGradient>
+                                </defs>
+                                <rect
+                                    data-day-data={JSON.stringify(day)}
+                                    // data-tooltip-id={`tooltip-year${year}-day${i}`}
+                                    // data-tooltip-html={tooltipHtml}
+                                    data-html={true}
+                                    width={1}
+                                    height={50}
+                                    x={i}
+                                    y={0}
+                                    fill={`url(#heat-gradient-year${year}-day${i})`}>
+                                </rect>
+                            </React.Fragment>
+                        )
+                    } else {
                         <rect
+                            key={`heat-year-${year}-day${i}`}
                             width={1}
                             height={50}
                             x={i}
                             y={0}
-                            fill={big ? 'none' : `var(--container-shadow)`}>
-                        </rect>)
-                    ))
-                )}
-
-
+                            fill={big ? 'none' : `var(--container-dark)`}>
+                        </rect>
+                    }
+                })}
         </svg>
     )
 }
 
-const RainYearSVG = ( {yearData, year, big} ) => {
-    const [isLoading, multiYear, dataType] = useContext(PageStateContext);
+const RainYearSVG = ({ yearData, year, big }) => {
+    const [isLoading, toolbarParams] = useContext(PageParamsContext);
 
     return (
         <svg 
-            className={`rain-year-svg ${multiYear ? 'multi-year' : ''}`}
+            className={`rain-year-svg ${toolbarParams.multiYear ? 'multi-year' : ''}`}
             viewBox={`0 0 366 50`}
             // shapeRendering="crispEdges"
             preserveAspectRatio="none">
@@ -133,4 +206,23 @@ const RainYearSVG = ( {yearData, year, big} ) => {
                 })}
         </svg>
     )
+}
+
+// String format tooltip for use with react-tooltip
+
+const WeatherToolTip = ({ dayData }) => {
+    return (`
+        <div className='tooltip-wrapper'>
+            <h3> ${dayData['day']} </h3>
+            <ul>
+                High Temp: ${dayData['MAX'].trim()}&#8457; 
+            </ul>
+            <ul>
+                Low Temp: ${dayData['MIN'].trim()}&#8457; 
+            </ul>
+            <ul>
+                Precipitation: ${dayData['PRCP'].trim()}inches
+            </ul>
+        </div>
+    `)
 }

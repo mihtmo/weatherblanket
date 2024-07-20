@@ -1,22 +1,3 @@
-// // Three.js version of weatherblanket
-// // Doesn't particularly offer benefits, but it was a good test
-// function enable3D() {
-//     let checkbox = document.getElementById("threeCheckbox")
-//     let threeWindow = document.getElementById("threeBlanket)")
-//     let keyBox = document.getElementById("keybox")
-//     let blankets = document.getElementById("blankets")
-
-//     if (checkbox.checked == true) {
-//         threeBlanket.style.display = "block"
-//         keyBox.style.display = "none"
-//         blankets.style.display = "none"
-//     } else {
-//         threeBlanket.style.display = "none"
-//         keyBox.style.display = "block"
-//         blankets.style.display = "block"
-//     }
-// }  
-
 function createHeatTics() {
 
     const degreeCount = 10;

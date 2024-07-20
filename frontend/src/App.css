@@ -4,9 +4,11 @@
     --container-back:  #f7f6f2;
     --container-mid: #dddcd9;
     --container-fore: #eeedea;
+    --container-shadow: #919191;
+    --container-dark: #e4e3e0;
     --container-highlight: #edece9;
-    --container-shadow: #e3e1dd;
-    --fill-color: #547a20;
+    --fill-color: #dbbc7a;
+    --fill-color-bright: #faf2df;
     --overlay: rgba(227, 225, 221, .8);
   }
   
@@ -18,8 +20,11 @@
     --container-highlight:#3b4349;
     --container-fore: #313a3f;
     --container-shadow: #131a1f;
+    --container-dark: #131a1f;
     --fill-color: #dbbc7a;
+    --fill-color-bright: #faf2df;
     --overlay: rgba(19, 26, 31, .8);
+    --input-background: #454e55;
   }
   
   html {
@@ -29,16 +34,149 @@
 
   #toolbar {
     display: flex;
+    flex-direction: column;
     width: auto;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    flex-wrap: wrap;
     width: fit-content;
-    max-width: 80vw;
-    padding: 1em;
-    background: var(--container-fore);
-    border-radius: 10px;
-    margin-bottom: 1em;
+    max-width: 1000px;
+    /* padding: 1em; */
+    /* background: var(--container-fore); */
+    /* border-radius: 10px; */
+    /* margin-bottom: 1em; */
+    /* border: solid 1px var(--border); */
+    box-sizing: border-box;
+    gap: .5rem;
+    /* position: relative; */
+    flex-wrap: wrap;
+  }
+
+  .tools-group {
+    display: flex;
+    flex-direction: column;
+    /* height: 90px; */
+    padding: .5rem;
+    gap: .5rem;
+    justify-content: start;
+    align-items: start;
+    text-align: center;
+    /* background: var(--container-fore); */
+    /* border: solid 1px var(--border); */
+    /* justify-content: space-between; */
+    /* background-color: var(--container-fore); */
+    /* padding: 1rem; */
+    /* border-radius: 5px; */
+    /* border: 1px dotted var(--border); */
+    /* box-shadow: inset 1px 1px 6px var(--container-shadow) */
+  }
+
+  .tools-title { 
+    width: 100%;
+    text-align: left;
+    /* font-style: italic; */
+  }
+
+  #toggles-wrapper {
+    display: flex;
+    gap: .5rem !important;
+    /* height: 100%; */
+    justify-content: center;
+    align-items: center;
+  }
+
+  .year-picker-wrapper {
+    display: flex;
+    border-radius: 5px;
+    justify-content: center;
+    width: 100%;
+  }
+  
+  .year-picker {
+    cursor: pointer;
+    z-index: 2;
+    box-shadow: 0px 2px 6px var(--container-shadow);
+  }
+
+  .year-picker:hover input {
+    background-color: var(--container-mid);
+  }
+
+  .year-picker input {
+    font-family: inherit;
+    cursor: pointer;
+    font-size: 1em;
+    height: 3.5em;
+    background-color: var(--input-background);
+    color: var(--text-default);
+    border-radius: 5px;
+    border: 1px solid var(--border);
+    box-sizing: border-box;
+    text-align: end;
+    width: 125px;
+    text-align: start;
+    padding: 1.5rem 0 0 1rem !important;
+  }
+
+  .react-datepicker-popper {
+    z-index: 3 !important;
+  }
+
+  #start-year-picker input {
+    border-radius: 5px 0 0 5px;
+  }
+
+  #end-year-picker input {
+    border-radius: 0 5px 5px 0;
+  }
+
+  #start-year-picker .react-datepicker__input-container::before {
+    content: 'Start';
+  }
+
+  .single-year-picker input {
+    width: 200px;
+  }
+  
+  .single-year-picker .react-datepicker__input-container::before {
+    content: 'Year';
+  }
+
+  .react-datepicker__input-container::before {
+    position: absolute;
+    padding: .5em 1em;
+    box-sizing: content-box;
+    color: var(--text-default) !important;
+    font-style: italic;
+    font-weight: 300;
+    pointer-events: none;
+  }
+
+  #end-year-picker .react-datepicker__input-container::before {
+    content: 'End';
+    position: absolute;
+    pointer-events: none;
+  }
+
+  #year-picker-middle {
+    height: 3.5rem;
+    background-color: var(--container-mid);
+    box-sizing: border-box;
+    text-align: center;
+    padding: .25rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    color: var(--border);
+    font-size: 1rem;
+  }
+
+  .react-datepicker__calendar-icon {
+    right: 0 !important;
+    top: .5rem !important;
+    right: .5rem !important;
+    width: 1.5em !important;
+    height: 1.5em !important;
+    pointer-events: none;
+    fill: var(--text-default);
   }
 
   .shadowed {
@@ -46,9 +184,9 @@
   }
 
   .year-slider {
-    width: 250px;
-    margin: 1em 2em 1em 1em;
-    min-width: 250px;
+    width: 100%;
+    margin: 1em 2em 2em 2em;
+    max-width: 500px;
   }
 
   .noUi-connect {
@@ -59,13 +197,103 @@
     margin-top: 5px;
   }
 
+  .noUi-pips, .noUi-value-sub {
+    color: var(--text-default) !important;
+  }
+
+  .noUi-marker-sub, .noUi-marker {
+    background: var(--text-default) !important;
+  }
+
   .noUi-pips-horizontal {
     padding: 5px 0 !important;
+    color: var(--text-default) !important;
   }
 
   .noUi-handle {
+    border: 1px solid var(--border) !important;
+    background: var(--fill-color-bright) !important;
     box-shadow: inset 0 0 1px var(--container-shadow), inset 0 1px 7px var(--container-shadow), 0 3px 6px -3px var(--container-shadow) i9m !important;
+    cursor: pointer !important;
   }
+
+  .noUi-target {
+    border: 1px solid var(--border) !important;
+    background: var(--container-back) !important;
+    box-shadow: inset 0 1px 1px var(--container-shadow), 0 3px 6px -5px var(--container-back) !important;
+  }
+
+  .noUi-handle::before, .noUi-handle::after {
+    background: var(--border) !important;
+  }
+
+  .react-datepicker__year-text--selected {
+    background-color: var(--fill-color) !important;
+    color: black !important;
+  }
+
+  .react-datepicker__year-text--today {
+    font-weight: normal !important;
+  }
+
+  /* .noUi-touch-area {
+    background: var(--container-back) !important;
+  } */
+
+  select {
+    /* appearance: none; */
+    background-color: transparent;
+    border: none;
+    padding: 0 0 0 0;
+    margin: 0;
+    width: 100%;
+    font-family: inherit;
+    font-size: inherit;
+    cursor: inherit;
+    line-height: inherit;
+  }
+
+  #station-select { 
+    cursor: pointer;
+    font-size: 1em;
+    /* margin: 1em; */
+    height: 34px;
+    background-color: var(--input-background);
+    border-radius: 5px;
+    border: 1px solid var(--border);
+  }
+
+  #station-select-wrapper > select {
+    padding: 0 .5em;
+    width: 258px;
+    color: var(--text-default);
+  }
+
+  #charts-and-menu-wrapper {
+    display: flex;
+    position: relative;
+    /* TODO: Hardcoding this size dependent on axis size is not great. 
+    This is a workaround for how Safari chooses to handle relative grid 
+    dimensions. Seek a solution */
+    /* height: calc(70vh - 70px); */
+    height: 80vh;
+    min-height: 420px;
+    box-sizing: border-box;
+    width: calc(100vw - 125px);
+    max-width: calc(100vw - 125px);
+    grid-row: 1;
+    grid-column: 2;
+    border: 2px solid var(--border);
+    background-color: var(--container-dark);
+    overflow: clip;
+    box-shadow: 0px 0px 8px .1px var(--container-shadow);
+    border-radius: 5px;
+}
+
+/* 
+  #station-select > option {
+    margin: 0 1em;
+  } */
   
   #portrait-overlay {
     position: fixed;
@@ -116,6 +344,12 @@
     align-items: center;
     justify-content: center;
     gap: .5em;
+  }
+
+  #weatherblanket-info-button {
+    position: absolute;
+    top: .5rem;
+    right: .5rem;
   }
   
   .details-icon .sound-source-icon{
@@ -169,14 +403,15 @@
   }
   
   #theme-icon-wrapper {
-    position: fixed;
-    margin: 1em;
-    bottom: 0;
-    right: 0;
+    /* position: absolute; */
+    /* margin: 1.5em;
+    top: 0;
+    right: 0; */
     width: fit-content;
   }
   
   .description-wrapper {
+    margin-top: 1rem;
     width: 80%;
   }
   
@@ -189,15 +424,9 @@
     }
   }
   
-  #audio-player {
-    width: 80vw;
-    background-color: none;
-    margin-top: .5em;
-  }
-  
   .title {
     font-size: 1em;    
-    font-weight: 300;
+    font-weight: 500;
     font-style: normal;
   }
   

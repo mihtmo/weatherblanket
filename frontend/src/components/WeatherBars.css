@@ -1,16 +1,22 @@
 
 #weather-bars {
     display: flex;
-    max-height: 80vh;
-    min-height: 0;
-    width: 80vw;
+    /* max-height: 100vh; */
+    height: calc(100% - 20px);
+    /* min-height: 80vh; */
+    /* width: 98vw;
+    max-width: 94vw; */
     grid-column: 1;
     grid-row: 1;
-    z-index: 1;
+    /* z-index: 1; */
     flex-direction: column;
-    padding: 1em;
-    background: var(--container-shadow);
-    border-radius: 10px;
+    /* padding: 2em; */
+    background: var(--container-dark);
+    /* border-radius: 10px; */
+    /* border: 1px solid var(--border); */
+    position: relative;
+    box-sizing: border-box;
+    align-items: stretch;
 }
 
 .weather-bar-year-wrapper {
@@ -30,7 +36,7 @@
     grid-column: 1;
     flex: 1;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: left;
     margin-top: -.5px;
 }
@@ -45,7 +51,7 @@
 .rain-year-svg {
     /* height: 100%; */
     width: 100%;
-    flex-grow: .25;
+    background: var(--container-dark);
 }
 
 .rain-year-svg.multi-year {
@@ -54,11 +60,18 @@
 
 .year-data-wrapper.single-year .weather-year-label {
     writing-mode: vertical-lr;
+    transform: rotate(180deg);
 }
 
 .weather-year-label {
-    margin-left: .5em;
     font-weight: 400;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-style: italic;
+    width: 60px;
+    font-size: 14px;
+    flex-shrink: 0;
 }
 
 .weather-year {
@@ -68,5 +81,49 @@
     justify-content: center;
     height: 100%;
     width: 100%;
-    background-color: var(--container-shadow);
+}
+
+.weather-tooltip {
+    font-family: inherit !important;
+    text-align: center !important;
+    color: var(--text-default) !important;
+    background: var(--container-dark) !important;
+    border: 1px solid var(--border) !important;
+}
+
+.react-tooltip-arrow {
+    border-right: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+}
+
+.core-styles-module_show__Nt9eE {
+    /* transition: none !important; */
+    will-change: none !important;
+}
+
+.core-styles-module_tooltip__3vRRp {
+    will-change: none !important;
+}
+
+/* .react-tooltip__closing {
+    display: none;
+} */
+
+.tooltip-wrapper {
+    padding: .5rem;
+}
+
+.tooltip-wrapper li {
+    margin: .5rem;
+    padding: 0;
+}
+
+.tooltip-wrapper ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0 0 1em 0;
+}
+
+.xAxis {
+    height: 30px;
 }
