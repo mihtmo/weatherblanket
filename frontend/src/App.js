@@ -163,9 +163,11 @@ const App = () => {
                         <p>
                             This is the second version of this tool! &nbsp;
                             <a href='https://www.mitchwebb.me/weatherblanket'>Check out the
-                            first version here.</a> I plan to
-                            add access to more cities and adjust the color-scale
-                            for the bars to allows for more insightful impressions.
+                            first version here.</a> This version is very much still
+                            in development. It looks like this SVG-based approach
+                            isn't going to work performance-wise, so I'll be
+                            switching to a Canvas-based visualization. That will
+                            hopefully allow me to add tooltips that feel performant!
                         </p>
                         <p>
                             Thanks for taking a peek! (July 2024)
