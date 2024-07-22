@@ -3,9 +3,6 @@ import { HeatKey, PrecipKey } from "./components/Key";
 import WeatherBlanket from "./components/Weatherblanket";
 import axios from "axios"
 import "./App.css"
-import InfoButton from "./components/InfoButton";
-import CustomToggle from "./components/CustomToggle";
-import YearSlider from "./components/YearSlider";
 import getDayOfTheYear from "./helpers/dayOfTheYear";
 import { PageParamsContextProvider } from "./contexts/PageParamsContext";
 import LightOrDarkIcon from "./components/LightOrDarkIcon";
@@ -53,8 +50,7 @@ const App = () => {
     const getAllWeatherData = async () => {
 
         setIsLoading(true);
-
-        const localData = JSON.parse(localStorage.getItem(toolbarParams['selectedStation']));
+        const localData = JSON.parse(localStorage.getItem(toolbarParams.selectedStation));
         if (localData) {
             console.log('found data in storage')
             setBlanketData(localData)
@@ -73,7 +69,6 @@ const App = () => {
             for (let day in dataArray) {
                 const date = dataArray[day]['DATE']
                 let dayNumber = getDayOfTheYear(`${date}T00:00`);
-                // console.warn('dayNumber:', dayNumber, 'day:', dataArray[day]['DATE'])
                 allYearsData[date.slice(0, 4)]['days'][dayNumber-1] = dataArray[day]
             }
             localStorage.setItem(toolbarParams['selectedStation'], JSON.stringify(allYearsData));
@@ -85,7 +80,7 @@ const App = () => {
     // On first load, get this years data from API
     useEffect(() => {
         getAllWeatherData()
-    }, [toolbarParams['selectedStation']])
+    }, [toolbarParams.selectedStation])
 
     // Change theme (todo: this could be smarter)
     function handleThemeChange() {

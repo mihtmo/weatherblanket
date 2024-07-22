@@ -11,6 +11,7 @@ const Toolbar = () => {
     const currentEndYear = selectedYears ? selectedYears[selectedYears.length - 1] : currentYear;
     const [startYear, setStartYear] = useState(currentStartYear);
     const [endYear, setEndYear] = useState(currentEndYear);
+    const [selectedStation, setSelectedStation] = useState(toolbarParams.selectedStation);
 
     function handleMultiYearToggle(e) {
         if (e.target.checked) {
@@ -18,14 +19,12 @@ const Toolbar = () => {
                 ...toolbarParams,
                 'multiYear': true,
                 'selectedYears': unfoldYears(startYear, endYear),
-                'dataType': 'heat'
             })
         } else {
             setToolbarParams({
                 ...toolbarParams,
                 'multiYear': false,
                 'selectedYears': [startYear],
-                'dataType': 'both'
             })
         }
     }
@@ -45,10 +44,11 @@ const Toolbar = () => {
     }
 
     function handleStationSelect(e) {
+        setSelectedStation(e.target.value);
         setToolbarParams({
             ...toolbarParams,
             'selectedStation': e.target.value,
-        })
+        });
     }
 
     function handleStartDateChange(year) {
@@ -83,7 +83,7 @@ const Toolbar = () => {
             <div className='tools-group'>
                 <div className='tools-title'>Location:</div>
                 <div id='station-select-wrapper'>
-                    <select id='station-select' onChange={handleStationSelect}>
+                    <select value={selectedStation} id='station-select' onChange={handleStationSelect}>
                         <option value='72254413958'>Austin (Camp Mabry)</option>
                         <option value='72259003927'>Dallas (DFW Airport)</option>
                         <option value='72253012921'>San Antonio (SAT Airport)</option>
@@ -143,13 +143,14 @@ const Toolbar = () => {
                     leftText='single-year' 
                     rightText='multi-year'
                     handler={handleMultiYearToggle}
-                    defaultOn={true}/>
+                    defaultOn={toolbarParams.multiYear}/>
                 <CustomToggle
                     id='data-type-toggle'
                     leftText='heat'
                     rightText='rain'
                     handler={handleTypeSelect}
-                    disabled={!toolbarParams.multiYear}/>
+                    disabled={!toolbarParams.multiYear}
+                    defaultOn={toolbarParams.dataType == 'rain'}/>
             </div>
         </div>
     )

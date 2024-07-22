@@ -47,7 +47,7 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
                     canvasCtx.beginPath();
                     const x = Math.floor(j * barWidth);
                     const yearData = blanketData?.[reversedYears[i]]?.['days']
-                    if (toolbarParams.dataType == 'heat' || toolbarParams.dataType == 'both') {
+                    if (toolbarParams.dataType == 'heat' || !toolbarParams.multiYear) {
                         const highTempColor = heatColorScale(yearData?.[j]?.['MAX']);
                         const lowTempColor = heatColorScale(yearData?.[j]?.['MIN']);
                         const grad = canvasCtx.createLinearGradient(x, y, x + barWidth, y + heatbarHeight);
@@ -99,7 +99,7 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
         if (canvasRef.current) {
             paintCanvas();
         }
-    }, [chartDims, toolbarParams])
+    }, [chartDims, toolbarParams, blanketData])
 
     const xDomain = [0, 12];
     const xRange = [0, chartDims.width];
