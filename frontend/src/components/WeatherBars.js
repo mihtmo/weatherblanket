@@ -1,7 +1,7 @@
 import "./WeatherBars.css"
 import React, { useContext, useEffect, useRef, useState } from "react";
 import { heatColorScale, rainScale } from "../helpers/colorScale";
-import BarLoader from "./loader";
+import BarLoader from "./Loader.js";
 import PageParamsContext from "../contexts/PageParamsContext";
 import * as d3 from 'd3-scale';
 import { XAxis } from "./Axes";
