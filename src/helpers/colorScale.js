@@ -36,6 +36,7 @@ export function heatColorScale(temp){
 
 // Get relative length of rain scale given amount and max
 export function rainScale(amount, max){
+    // Handle bad values from weather API
     if (amount == 99.99) {
         return 0
     } else {

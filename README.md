@@ -10,3 +10,4 @@ soon!
     - Store less data in browser
     - Clean up old code
     - Add commenting throughout
+    - Expanding viz to fit in wrapper with axes on outside

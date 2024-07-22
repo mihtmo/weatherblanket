@@ -70,6 +70,9 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
                         grad.addColorStop(1, '#2c48b8');
                         canvasCtx.fillStyle = grad;
                         canvasCtx.rect(x, rainStart, Math.ceil(barWidth), rainHeight);
+                        if (rainHeight > 0) {
+                            canvasCtx.arc(x + (Math.ceil(barWidth) / 2), rainStart + rainHeight, Math.ceil(barWidth) / 2, 0, Math.PI);
+                        }
                         canvasCtx.fill();
                     }
                 }
