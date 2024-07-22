@@ -1,9 +1,13 @@
 # weatherblanket
 Weather visualization webpage using React
-Sorry that this ReadMe is blank for now! I'm just getting started on this
-new version, and I'll update this soon.
+
+Sorry that this ReadMe is blank for now! This new version is barely off the 
+ground, and there's a TON of cleanup that needs to happen. I'll be making fixes
+soon!
 
 
 ## TODO:
     - Add year labels on y-axis
     - Store less data in browser
+    - Clean up old code
+    - Add commenting throughout
