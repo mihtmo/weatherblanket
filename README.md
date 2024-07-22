@@ -7,7 +7,6 @@ soon!
 
 
 ## TODO:
-    - Add year labels on y-axis
     - Store less data in browser
     - Clean up old code
     - Add commenting throughout
