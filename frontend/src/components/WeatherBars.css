@@ -1,8 +1,24 @@
+#weather-canvas {
+    image-rendering: -moz-crisp-edges;
+    image-rendering: -webkit-crisp-edges;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.chart-wrapper {
+    height: 100%;
+    width: 100%;
+    min-height: 0;
+}
 
 #weather-bars {
     display: flex;
     /* max-height: 100vh; */
-    height: calc(100% - 20px);
+    height: 100%;
+    width: 100%;
     /* min-height: 80vh; */
     /* width: 98vw;
     max-width: 94vw; */
@@ -11,12 +27,12 @@
     /* z-index: 1; */
     flex-direction: column;
     /* padding: 2em; */
-    background: var(--container-dark);
+    /* background: var(--container-dark); */
     /* border-radius: 10px; */
     /* border: 1px solid var(--border); */
     position: relative;
-    box-sizing: border-box;
-    align-items: stretch;
+    /* box-sizing: border-box; */
+    /* align-items: stretch; */
 }
 
 .weather-bar-year-wrapper {
@@ -126,4 +142,5 @@
 
 .xAxis {
     height: 30px;
+    flex-shrink: 0;
 }

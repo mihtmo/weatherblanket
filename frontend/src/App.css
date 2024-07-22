@@ -270,8 +270,10 @@
   }
 
   #charts-and-menu-wrapper {
+    user-select: none;
+    /* margin-left: 1rem; */
     display: flex;
-    position: relative;
+    /* position: relative; */
     /* TODO: Hardcoding this size dependent on axis size is not great. 
     This is a workaround for how Safari chooses to handle relative grid 
     dimensions. Seek a solution */
@@ -285,7 +287,7 @@
     grid-column: 2;
     border: 2px solid var(--border);
     background-color: var(--container-dark);
-    overflow: clip;
+    /* overflow: clip; */
     box-shadow: 0px 0px 8px .1px var(--container-shadow);
     border-radius: 5px;
 }

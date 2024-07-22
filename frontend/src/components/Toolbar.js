@@ -5,25 +5,12 @@ import PageParamsContext from "../contexts/PageParamsContext";
 
 const Toolbar = () => {
     const currentYear = new Date().getUTCFullYear();
-    const [startYear, setStartYear] = useState(currentYear - 2);
-    const [endYear, setEndYear] = useState(currentYear);
     const [isLoading, toolbarParams, setToolbarParams] = useContext(PageParamsContext);
-
-    // function handleSliderChange(value) {
-    //     // If selecting single year, set both years to same
-    //     if (value.length === 1) {
-    //         setToolbarParams({
-    //             ...toolbarParams,
-    //             'selectedYears': [parseInt(value)]
-    //         })
-    //     // Else return range of two
-    //     } else {
-    //         setToolbarParams({
-    //             ...toolbarParams,
-    //             'selectedYears': unfoldYears(value[0], value[1])
-    //         })
-    //     }
-    // }
+    const selectedYears = toolbarParams.selectedYears;
+    const currentStartYear = selectedYears ? selectedYears[0] : currentYear - 2;
+    const currentEndYear = selectedYears ? selectedYears[selectedYears.length - 1] : currentYear;
+    const [startYear, setStartYear] = useState(currentStartYear);
+    const [endYear, setEndYear] = useState(currentEndYear);
 
     function handleMultiYearToggle(e) {
         if (e.target.checked) {

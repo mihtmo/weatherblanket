@@ -11,7 +11,6 @@ import { PageParamsContextProvider } from "./contexts/PageParamsContext";
 import LightOrDarkIcon from "./components/LightOrDarkIcon";
 import isMobileBrowser from "./helpers/isMobileBrowser.js";
 import RotateIcon from "./components/RotateIcon";
-import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import Sidebar from "./components/Sidebar.js"
 
@@ -87,8 +86,6 @@ const App = () => {
         document.body.style.backgroundColor = backgroundColor;
     }, [isDarkTheme])
 
-    console.log(blanketData)
-
     return (
         <div 
             id='weather-page-wrapper' 
@@ -131,12 +128,12 @@ const App = () => {
                             Weatherblankets are created by recording the high 
                             temperature of the day, assigning a color to it, 
                             and knitting/crocheting a row of that color onto a 
-                            blanket to create visual map of temperature 
+                            blanket to create a visual map of temperature 
                             throughout the year.
                         </p>
                         <p>
                             I found this concept delightful when I first saw it, 
-                            and wanted to give myself access to this kind of 
+                            and I wanted to give myself access to this kind of 
                             visualization for my own city (Austin), especially
                             considering the weather events we had been having. 
                             As I currently have no knitting skills, my thoughts 
@@ -154,7 +151,7 @@ const App = () => {
                             precipitation for that day. In 'multi-year' mode,
                             you can stack multiple years to examine their
                             differences. In this mode, you can switch between
-                            a blanket depicting heat, and a blanket depicting
+                            a blanket depicting heat and a blanket depicting
                             precipitation.
                         </p>
                         <p>
@@ -164,10 +161,10 @@ const App = () => {
                             This is the second version of this tool! &nbsp;
                             <a href='https://www.mitchwebb.me/weatherblanket'>Check out the
                             first version here.</a> This version is very much still
-                            in development. It looks like this SVG-based approach
-                            isn't going to work performance-wise, so I'll be
-                            switching to a Canvas-based visualization. That will
-                            hopefully allow me to add tooltips that feel performant!
+                            in development. I've recently switched over to a canvas-based
+                            approach after finding SVGs a little too sluggish. 
+                            Reach out on my <a href='https://www.mitchwebb.me/contact'>
+                            contact page</a> if you find any issues!
                         </p>
                         <p>
                             Thanks for taking a peek! (July 2024)

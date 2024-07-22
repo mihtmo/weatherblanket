@@ -24,8 +24,8 @@
     background-color: var(--container-dark);
     padding: 2rem;
     box-sizing: border-box;
-    display: flex;
-    flex-direction: column;
+    /* display: flex;
+    flex-direction: column; */
 }
 
 .heat-column {
@@ -46,11 +46,25 @@
 }
 
 #blanket-tooltip {
-    position: absolute;
-    width: 100px;
-    height: 100px;
+    margin-left: 5px;
+    position: fixed;
     z-index: 9999;
+    background-color: var(--container-fore);
+    border: 1px solid var(--border);
+    color: var(--text-default);
+    pointer-events: none;
 }
+
+/* #blanket-tooltip::after {
+    content: " ";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent var(--container-fore) transparent transparent;
+} */
 
 /* .weather-tooltip {
     display: none;
