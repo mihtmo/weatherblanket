@@ -175,6 +175,11 @@ const App = () => {
                             contact page</a> if you find any issues!
                         </p>
                         <p>
+                            Also, this app was designed for desktop. Mobile
+                            viewing works, but is not optimal. Sorry about that,
+                            maybe in the future!
+                        </p>
+                        <p>
                             Thanks for taking a peek! (July 2024)
                         </p>
                     </div>
