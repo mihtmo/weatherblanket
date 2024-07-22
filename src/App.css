@@ -296,6 +296,10 @@
   #station-select > option {
     margin: 0 1em;
   } */
+
+  a {
+    color: var(--fill-color);
+  }
   
   #portrait-overlay {
     position: fixed;
