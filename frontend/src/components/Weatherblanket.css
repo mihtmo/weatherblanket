@@ -169,22 +169,6 @@
     /* transition: 1s; */
 }
 
-#key-icon {
-    background-image: url("../images/key.png");
-    background-size: cover;
-    height: 8vw;
-    max-height: max(10vh, 4vw);
-    min-height: 5vh;
-    aspect-ratio: 5/8;
-    position: absolute;
-    top: calc(50% - min(2.5vw, 4vw));
-    cursor: pointer;
-    z-index: -40;
-    opacity: 70%;
-    left: 2.5vw;
-    /* transition: 1s; */
-}
-
 #weatherblanket-title {
     font-size: 1.5em;
     font-style: normal;
