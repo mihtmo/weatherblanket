@@ -297,7 +297,11 @@
     margin: 0 1em;
   } */
 
-  a {
+  .description-wrapper a {
+    color: var(--fill-color);
+  }
+
+  .description-wrapper a:visited {
     color: var(--fill-color);
   }
   
