@@ -22,7 +22,7 @@
     width: 100%;
     height: 100%;
     background-color: var(--container-dark);
-    padding: 2rem;
+    padding: 2rem 2rem 2rem 1rem;
     box-sizing: border-box;
     border-radius: 5px;
     /* display: flex;

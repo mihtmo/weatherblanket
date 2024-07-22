@@ -95,6 +95,7 @@
     cursor: pointer;
     z-index: 2;
     box-shadow: 0px 2px 6px var(--container-shadow);
+    border-radius: 5px;
   }
 
   .year-picker:hover input {
