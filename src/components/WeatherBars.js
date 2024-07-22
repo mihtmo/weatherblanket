@@ -13,6 +13,7 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
     const reversedYears = [...toolbarParams.selectedYears.slice().reverse()];
     const chartRef = useRef();
     const canvasRef = useRef();
+    const yearCount = toolbarParams.selectedYears.length;
 
     function handleMouseMove(e) {
         handleMousePosition(e);
@@ -26,7 +27,6 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
         canvasCtx.clearRect(0, 0, chartDims.width, chartDims.height);
         canvasCtx.beginPath();
 
-        const yearCount = toolbarParams.selectedYears.length;
         const barWidth = chartDims.width / 366;
         let heatbarHeight = chartDims.height / yearCount;
 
@@ -109,22 +109,37 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
 
     return (
         <div id='weather-bars' className='shadowed-inset'>
-            {(chartDims.width && !isLoading) && (
-                <XAxis
-                    values={xValues}
-                    domain={xDomain}
-                    range={xRange}
-                    scale={xScale}
-                    valueMap={valueMap}/>
-            )}
             {isLoading ? 
                 <BarLoader/>
                 :
-                <div className='chart-wrapper' ref={chartRef}>
-                    { chartRef.current &&
-                        <canvas onMouseLeave={clearMouseCoords} onMouseMove={handleMouseMove} id='weather-canvas' ref={canvasRef}></canvas>
-                    }
+                <div className='chart-and-axes-wrapper'>
+                    {(chartDims.width && !isLoading) && (
+                        <XAxis
+                            values={xValues}
+                            domain={xDomain}
+                            range={xRange}
+                            scale={xScale}
+                            valueMap={valueMap}/>
+                    )}
+                    <div className='years-labels'>
+                        {reversedYears.map((year) => {
+                            return(
+                                <div 
+                                    key={`year-${year}-label`} 
+                                    className='year-label'
+                                    style={{'height': chartDims.height / yearCount}}>
+                                    {year}
+                                </div>
+                            )
+                        })}
+                    </div>
+                    <div className='chart-wrapper' ref={chartRef}>
+                        { chartRef.current &&
+                            <canvas onMouseLeave={clearMouseCoords} onMouseMove={handleMouseMove} id='weather-canvas' ref={canvasRef}></canvas>
+                        }
+                    </div>
                 </div>
+
             }
         </div>
     )

@@ -12,6 +12,30 @@
     height: 100%;
     width: 100%;
     min-height: 0;
+    grid-column: 2;
+    grid-row: 2;
+}
+
+.chart-and-axes-wrapper {
+    display: grid;
+    grid-template-columns: 4rem auto;
+    grid-template-rows: 30px auto;
+    height: 100%;
+    width: 100%;
+}
+
+.years-labels {
+    grid-row: 2;
+    grid-column: 1;
+    height: 100%;
+    width: 4rem;
+}
+
+.year-label {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
 }
 
 #weather-bars {
@@ -142,5 +166,8 @@
 
 .xAxis {
     height: 30px;
+    width: 100%;
     flex-shrink: 0;
+    grid-column: 2;
+    grid-row: 1;
 }
