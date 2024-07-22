@@ -37,6 +37,19 @@ const App = () => {
         setIsDarkTheme(!isDarkTheme)
     }
 
+    // Watch for orientation change, set state respectively
+    useEffect(() => {
+        function handleOrientationChange(e) {
+            const landscape = e.matches;
+            setIsLandscapeMode(landscape);
+        }
+        window.matchMedia("(orientation: landscape)").addEventListener(
+                                            "change", handleOrientationChange);
+        // Cleanup event listener
+        return window.matchMedia("(orientation: landscape)").removeEventListener(
+                                            "change", handleOrientationChange);
+    }, [])
+
     const getAllWeatherData = async () => {
 
         setIsLoading(true);
