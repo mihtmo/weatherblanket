@@ -106,6 +106,7 @@ const Toolbar = () => {
                                 maxDate={new Date(String(endYear + 1)).toISOString()}
                                 onChange={handleStartDateChange}
                                 showYearPicker
+                                onFocus={e => e.target.blur()}
                                 dateFormat="yyyy"/>
                         </div>
                         <div id='year-picker-middle'/>
@@ -118,6 +119,7 @@ const Toolbar = () => {
                                 maxDate={new Date()}
                                 onChange={handleEndDateChange}
                                 showYearPicker
+                                onFocus={e => e.target.blur()}
                                 dateFormat="yyyy"/>
                         </div>
                         </>
@@ -131,6 +133,7 @@ const Toolbar = () => {
                                 maxDate={new Date()}
                                 onChange={handleStartDateChange}
                                 showYearPicker
+                                onFocus={e => e.target.blur()}
                                 dateFormat='yyyy'/>
                         </div>
                     }
