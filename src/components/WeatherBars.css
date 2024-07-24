@@ -18,7 +18,7 @@
 
 #chart-and-axes-wrapper {
     display: grid;
-    grid-template-columns: 4rem auto;
+    grid-template-columns: 4rem auto 4rem;
     grid-template-rows: 30px auto;
     height: 100%;
     width: 100%;

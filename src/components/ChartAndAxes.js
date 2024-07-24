@@ -44,7 +44,7 @@ const WeatherBlanket = ({ blanketData }) => {
 
     return (
         <div id='chart-and-axes-wrapper'>
-            {chartDims.width && (
+            {(chartDims.width && !isLoading) && (
                 <XAxis
                     values={xValues}
                     domain={xDomain}
@@ -52,7 +52,7 @@ const WeatherBlanket = ({ blanketData }) => {
                     scale={xScale}
                     valueMap={valueMap}/>
             )}
-            {chartDims.height && (
+            {(chartDims.height && !isLoading) && (
                 <div className='years-labels'>
                     {reversedYears.map((year) => {
                         return(
