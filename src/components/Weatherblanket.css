@@ -11,18 +11,11 @@
     -webkit-user-select: none; /* Safari */
     -ms-user-select: none; /* IE 10 and IE 11 */
     user-select: none; /* Standard syntax */
-    /* transition: 1s; */
-    /* height: calc(90vh - 90px); */
-    /* width: 80vw; */
-    /* display: grid; */
-    /* grid-template-columns: repeat(auto-fit, minmax(100px, auto)); */
-    /* height: calc(92vh - 198px); */
-    /* min-height: calc(92vh - 198px); */
-    /* max-width: 95vw; */
+    position: relative;
     width: 100%;
     height: 100%;
     background-color: var(--container-dark);
-    padding: 2rem 2rem 2rem 1rem;
+    /* padding: 2rem 2rem 2rem 1rem; */
     box-sizing: border-box;
     border-radius: 5px;
     /* display: flex;

@@ -1,6 +1,4 @@
 import { useEffect, useState } from "react";
-import { HeatKey, PrecipKey } from "./components/Key";
-import WeatherBlanket from "./components/Weatherblanket";
 import axios from "axios"
 import "./App.css"
 import getDayOfTheYear from "./helpers/dayOfTheYear";
@@ -9,7 +7,8 @@ import LightOrDarkIcon from "./components/LightOrDarkIcon";
 import isMobileBrowser from "./helpers/isMobileBrowser.js";
 import RotateIcon from "./components/RotateIcon";
 import "react-datepicker/dist/react-datepicker.css";
-import Sidebar from "./components/Sidebar.js"
+import { XAxis } from "./components/Axes";
+import  ChartAndAxes from "./components/ChartAndAxes.js";
 
 const App = () => {
     const currentYear = new Date().getUTCFullYear();
@@ -99,7 +98,7 @@ const App = () => {
             id='weather-page-wrapper' 
             className='theme-wrapper' 
             data-theme={isDarkTheme?'dark':'light'}
-            >
+        >
             { (mobileUser && !isLandscapeMode) && (
                 <div id='portrait-overlay'> 
                     <div id='overlay-text-wrapper'>
@@ -109,7 +108,6 @@ const App = () => {
                     </div>
                 </div>
             )}
-            {/* <button onClick={getWeatherData}></button> */}
             <PageParamsContextProvider value={[isLoading, toolbarParams, setToolbarParams]}>
                 <div id='display-and-header-wrapper'>
                     <div id='weatherblanket-header'>
@@ -120,10 +118,7 @@ const App = () => {
                             isDarkTheme={isDarkTheme}
                             clickHandler={handleThemeChange}/>
                     </div>
-                    <div id='charts-and-menu-wrapper' className='canvases'>
-                        <WeatherBlanket blanketData={blanketData}/>
-                        <Sidebar/>
-                    </div>
+                    <ChartAndAxes blanketData={blanketData}/>
                     <div className='description-wrapper'>
                         <p> 
                             Weatherblanket was created as a way to depict local

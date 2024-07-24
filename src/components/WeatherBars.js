@@ -1,11 +1,10 @@
 import "./WeatherBars.css"
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef } from "react";
 import { heatColorScale, rainScale } from "../helpers/colorScale";
 import BarLoader from "./Loader.js";
 import PageParamsContext from "../contexts/PageParamsContext";
 import * as d3 from 'd3-scale';
 import { XAxis } from "./Axes";
-import { Tooltip } from 'react-tooltip'
 import 'react-tooltip/dist/react-tooltip.css'
 
 export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, chartDims, clearMouseCoords }) => {
@@ -104,45 +103,16 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
         }
     }, [chartDims, toolbarParams, blanketData])
 
-    const xDomain = [0, 12];
-    const xRange = [0, chartDims.width];
-    const xValues = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11 ];
-    const xScale = d3.scaleLinear().domain(xDomain).range(xRange);
-    const valueMap = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-
     return (
         <div id='weather-bars' className='shadowed-inset'>
             {isLoading ? 
                 <BarLoader/>
                 :
-                <div className='chart-and-axes-wrapper'>
-                    {(chartDims.width && !isLoading) && (
-                        <XAxis
-                            values={xValues}
-                            domain={xDomain}
-                            range={xRange}
-                            scale={xScale}
-                            valueMap={valueMap}/>
-                    )}
-                    <div className='years-labels'>
-                        {reversedYears.map((year) => {
-                            return(
-                                <div 
-                                    key={`year-${year}-label`} 
-                                    className='year-label'
-                                    style={{'height': chartDims.height / yearCount}}>
-                                    {year}
-                                </div>
-                            )
-                        })}
-                    </div>
-                    <div className='chart-wrapper' ref={chartRef}>
-                        { chartRef.current &&
-                            <canvas onMouseLeave={clearMouseCoords} onMouseMove={handleMouseMove} id='weather-canvas' ref={canvasRef}></canvas>
-                        }
-                    </div>
+                <div className='chart-wrapper' ref={chartRef}>
+                    { chartRef.current &&
+                        <canvas onMouseLeave={clearMouseCoords} onMouseMove={handleMouseMove} id='weather-canvas' ref={canvasRef}></canvas>
+                    }
                 </div>
-
             }
         </div>
     )
