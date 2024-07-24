@@ -44,15 +44,18 @@ const WeatherBlanket = ({ blanketData }) => {
 
     return (
         <div id='chart-and-axes-wrapper'>
-            {(chartDims.width && !isLoading) && (
+            {(chartDims.width && !isLoading) ? (
                 <XAxis
                     values={xValues}
                     domain={xDomain}
                     range={xRange}
                     scale={xScale}
                     valueMap={valueMap}/>
-            )}
-            {(chartDims.height && !isLoading) && (
+                ) : (
+                    null
+                )
+            }
+            {(chartDims.height && !isLoading) ? (
                 <div className='years-labels'>
                     {reversedYears.map((year) => {
                         return(
@@ -65,7 +68,10 @@ const WeatherBlanket = ({ blanketData }) => {
                             )
                     })}
                 </div>
-            )}
+                ) : (
+                    null
+                )
+            }
             <div id='chart-and-menu-wrapper' className='canvases'>
                 <div id='weatherblanket-wrapper'>
                     {isLoading ? (
