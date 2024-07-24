@@ -349,6 +349,7 @@
 
   #weather-page-wrapper {
     font-weight: 400;
+    width: 100vw;
   }
 
   #weatherblanket-header {
