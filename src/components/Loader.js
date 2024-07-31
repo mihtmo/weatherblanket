@@ -6,8 +6,8 @@ const BarLoader = ( ) => {
     return (
         <div className='bar-loader-wrapper'>
             <div className='bar-loader'>
-                <svg viewBox='0 0 24 24' fill='url(#a)'>
-                    <def>
+                <svg viewBox='0 0 24 24'>
+                    <defs>
                         <linearGradient id='gradient1' gradientUnits="userSpaceOnUse" x1='0%' y1='0%' x2='0%' y2='100%'>
                             <stop offset='0%' stopOpacity='100%' stopColor='#6bbcd1'/>
                             <stop offset='100%' stopOpacity='100%' stopColor='#2c48b8'/>
@@ -28,7 +28,7 @@ const BarLoader = ( ) => {
                             <stop offset='0%' stopOpacity='100%' stopColor='#962101'/>
                             <stop offset='100%' stopOpacity='100%' stopColor='#d95700'/>
                         </linearGradient>
-                    </def>
+                    </defs>
                     <line stroke='url(#gradient1)' x1="2" y1="14" x2="2" y2="24" strokeWidth='4'>
                         <animate
                             attributeName='y1'
