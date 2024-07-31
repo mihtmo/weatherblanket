@@ -59,7 +59,7 @@ const BarLoader = ( ) => {
                             repeatCount='indefinite'
                             calcMode='spline'
                             keyTimes='0; 0.33; 0.66; 1'
-                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1;'
+                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1'
                             begin='.3'/>
                     </line>
                     <line stroke='url(#gradient4)' x1="17"  y1="14" x2="17" y2="24" strokeWidth='4'>
@@ -70,7 +70,7 @@ const BarLoader = ( ) => {
                             repeatCount='indefinite'
                             calcMode='spline'
                             keyTimes='0; 0.33; 0.66; 1'
-                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1;'
+                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1'
                             begin='.4'/>
                     </line>
                     <line stroke='url(#gradient5)' x1="22"  y1="14" x2="22" y2="24" strokeWidth='4'>
@@ -81,7 +81,7 @@ const BarLoader = ( ) => {
                             repeatCount='indefinite'
                             calcMode='spline'
                             keyTimes='0; 0.33; 0.66; 1'
-                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1;'
+                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1'
                             begin='.5'/>
                     </line>
                 </svg>
