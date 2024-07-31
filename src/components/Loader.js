@@ -36,8 +36,8 @@ const BarLoader = ( ) => {
                             dur='1.5s'
                             repeatCount='indefinite'
                             calcMode='spline'
-                            keyTimes='0;0.33;0.66;1'
-                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1;'
+                            keyTimes='0; 0.33; 0.66; 1'
+                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1'
                             begin='.1'/>
                     </line>
                     <line stroke='url(#gradient2)' x1="7"  y1="14" x2="7" y2="24" strokeWidth='4'>
@@ -47,8 +47,8 @@ const BarLoader = ( ) => {
                             dur='1.5s'
                             repeatCount='indefinite'
                             calcMode='spline'
-                            keyTimes='0;0.33;0.66;1'
-                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1;'
+                            keyTimes='0; 0.33; 0.66; 1'
+                            keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1'
                             begin='.2'/>
                     </line>
                     <line stroke='url(#gradient3)' x1="12"  y1="14" x2="12" y2="24" strokeWidth='4'>
@@ -58,7 +58,7 @@ const BarLoader = ( ) => {
                             dur='1.5s'
                             repeatCount='indefinite'
                             calcMode='spline'
-                            keyTimes='0;0.33;0.66;1'
+                            keyTimes='0; 0.33; 0.66; 1'
                             keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1;'
                             begin='.3'/>
                     </line>
@@ -69,7 +69,7 @@ const BarLoader = ( ) => {
                             dur='1.5s'
                             repeatCount='indefinite'
                             calcMode='spline'
-                            keyTimes='0;0.33;0.66;1'
+                            keyTimes='0; 0.33; 0.66; 1'
                             keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1;'
                             begin='.4'/>
                     </line>
@@ -80,7 +80,7 @@ const BarLoader = ( ) => {
                             dur='1.5s'
                             repeatCount='indefinite'
                             calcMode='spline'
-                            keyTimes='0;0.33;0.66;1'
+                            keyTimes='0; 0.33; 0.66; 1'
                             keySplines='0.55 0 0.45 1; 0.55 0 0.45 1; 0.55 0 0.45 1;'
                             begin='.5'/>
                     </line>
