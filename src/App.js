@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import getDayOfTheYear from './helpers/dayOfTheYear';
@@ -11,6 +11,14 @@ import { XAxis } from './components/Axes';
 import ChartAndAxes from './components/ChartAndAxes.js';
 
 const App = () => {
+    const renderCount = useRef(0);
+    renderCount.current += 1;
+    console.log('Render #', renderCount.current, {
+        isLoading,
+        toolbarParams,
+        blanketData: !!blanketData,
+    });
+    console.log('App rendering');
     const currentYear = new Date().getUTCFullYear();
     const [blanketData, setBlanketData] = useState(null);
     const [isDarkTheme, setIsDarkTheme] = useState(
@@ -24,7 +32,7 @@ const App = () => {
     const [toolbarParams, setToolbarParams] = useState({
         multiYear: true,
         dataType: 'heat',
-        selectedStation: '72254413958',
+        selectedStation: 'GHCND:USW00013958',
         selectedYears: [currentYear - 2, currentYear - 1, currentYear],
     });
 
@@ -48,50 +56,88 @@ const App = () => {
             .removeEventListener('change', handleOrientationChange);
     }, []);
 
-    const getAllWeatherData = async () => {
+    const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    const getWeatherData = async (signal) => {
         setIsLoading(true);
-        const localData = JSON.parse(
-            localStorage.getItem(toolbarParams.selectedStation),
-        );
-        if (localData) {
-            console.log('found data in storage');
-            setBlanketData(localData);
-            setIsLoading(false);
-        } else {
-            const todaysDate = new Date().toJSON().slice(0, 10);
-            const response = await axios.get(
-                `https://www.ncei.noaa.gov/access/services/data/v1?dataset=global-summary-of-the-day&stations=${toolbarParams['selectedStation']}&startDate=${'2000-01-01'}&endDate=${todaysDate}&dataTypes=MAX,MIN,PRCP&format=json`,
-            );
-            let dataArray = await response.data;
-            let allYearsData = {};
-            for (let i = 2000; i <= currentYear; i++) {
-                allYearsData[i] = {};
-                allYearsData[i]['days'] = Array(366).fill(null);
+        let allYearsData = {};
+
+        for (let year of toolbarParams.selectedYears) {
+            if (signal.aborted) return;
+
+            const cacheKey = `${toolbarParams.selectedStation}-${year}`;
+            const cached = JSON.parse(localStorage.getItem(cacheKey));
+
+            if (cached && year !== currentYear) {
+                allYearsData[year] = cached;
+                continue;
             }
-            for (let day in dataArray) {
-                const date = dataArray[day]['DATE'];
-                let dayNumber = getDayOfTheYear(`${date}T00:00`);
-                allYearsData[date.slice(0, 4)]['days'][dayNumber - 1] =
-                    dataArray[day];
+
+            allYearsData[year] = { days: Array(366).fill(null) };
+
+            const startdate = `${year}-01-01`;
+            const enddate =
+                year === currentYear
+                    ? new Date().toJSON().slice(0, 10)
+                    : `${year}-12-31`;
+
+            // Have to make separate calls because of the 1000 result limit
+            // Each data param is a result, so we lose December
+            const urls = [
+                `/api/noaa?datasetid=GHCND&stationid=${toolbarParams.selectedStation}&startdate=${startdate}&enddate=${enddate}&datatypeid=TMAX,TMIN&limit=1000&units=standard`,
+                `/api/noaa?datasetid=GHCND&stationid=${toolbarParams.selectedStation}&startdate=${startdate}&enddate=${enddate}&datatypeid=PRCP&limit=1000&units=standard`,
+            ];
+
+            for (const url of urls) {
+                let success = false;
+                while (!success && !signal.aborted) {
+                    try {
+                        const response = await axios.get(url, { signal });
+                        const results = response.data?.results ?? [];
+                        for (let record of results) {
+                            const date = record.date.slice(0, 10);
+                            const recordYear = date.slice(0, 4);
+                            const dayNumber = getDayOfTheYear(`${date}T00:00`);
+                            if (!allYearsData[recordYear].days[dayNumber - 1]) {
+                                allYearsData[recordYear].days[dayNumber - 1] = {
+                                    date,
+                                };
+                            }
+                            allYearsData[recordYear].days[dayNumber - 1][
+                                record.datatype
+                            ] = record.value;
+                        }
+                        success = true;
+                    } catch (err) {
+                        if (axios.isCancel(err)) return;
+                        console.error(
+                            `Error fetching ${year}, retrying...`,
+                            err.message,
+                        );
+                        await delay(2000);
+                    }
+                }
+                await delay(300);
             }
-            localStorage.setItem(
-                toolbarParams['selectedStation'],
-                JSON.stringify(allYearsData),
-            );
-            setBlanketData(allYearsData);
-            setIsLoading(false);
+
+            if (year !== currentYear) {
+                localStorage.setItem(
+                    `${toolbarParams.selectedStation}-${year}`,
+                    JSON.stringify(allYearsData[year]),
+                );
+            }
         }
+
+        setBlanketData(allYearsData);
+        setIsLoading(false);
     };
 
-    // On first load, get this years data from API
+    // On first load, get recent data from API
     useEffect(() => {
-        getAllWeatherData();
-    }, [toolbarParams.selectedStation]);
-
-    // Change theme (todo: this could be smarter)
-    function handleThemeChange() {
-        setIsDarkTheme(!isDarkTheme);
-    }
+        const controller = new AbortController();
+        getWeatherData(controller.signal);
+        return () => controller.abort();
+    }, [toolbarParams.selectedStation, toolbarParams.selectedYears]);
 
     // Set overall body-element background-color based on CSS variable
     // This is done to prevent different background on scroll
@@ -175,10 +221,10 @@ const App = () => {
                         <p>
                             Also, this app was designed for desktop. Mobile
                             viewing works, but is not optimal. Sorry about that,
-                            maybe in the future! Reach out on my
+                            maybe in the future! Reach out on my{' '}
                             <a href="https://www.mitchwebb.me/contact">
                                 contact page
-                            </a>
+                            </a>{' '}
                             if you find any issues!
                         </p>
                         <p>Thanks for taking a peek! (July 2024)</p>

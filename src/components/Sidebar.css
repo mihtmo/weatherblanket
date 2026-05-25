@@ -6,14 +6,11 @@
     align-items: center;
     justify-content: start;
     user-select: none;
-    /* min-width: 330px; */
-    /* background-color: var(--container-highlight); */
     border: 1px solid var(--container-mid);
-    /* border-radius: 4px; */
-    /* box-shadow: -1px 0px 1px 1px var(--container-shadow); */
-    padding: .5rem;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
+    padding: 0.5rem;
     gap: 1em;
-    border-radius: 0px 5px 5px 0px;
 }
 
 #sidebar-wrapper {
@@ -21,9 +18,10 @@
     flex-shrink: 0;
     background-color: var(--container-fore);
     width: fit-content;
-    transition: all .25s ease-in-out;
+    transition: all 0.25s ease-in-out;
     position: relative;
-    border-radius: 0px 5px 5px 0px;
+    border-top-right-radius: 7px;
+    border-bottom-right-radius: 7px;
 }
 
 #sidebar-wrapper.menu-open {
@@ -41,16 +39,16 @@
 }
 
 #soloist-header {
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 }
 
 #band-color-select {
     margin-top: 1em;
-    margin-bottom: .5em;
+    margin-bottom: 0.5em;
 }
 
 .sidebar-icon-wrapper {
-    transition: all .1s ease-in-out;
+    transition: all 0.1s ease-in-out;
 }
 
 .sidebar-icon-wrapper:hover .sidebar-icon {
@@ -62,14 +60,13 @@
     border-bottom: 1px solid var(--border);
 }
 
-
 #presets-table .preset-row:hover {
     background-color: var(--container-back);
     cursor: pointer;
 }
 
-#presets-table .preset-row:last-child { 
-    border-bottom: none; 
+#presets-table .preset-row:last-child {
+    border-bottom: none;
 }
 
 .preset-row:active {
@@ -87,7 +84,7 @@
     overflow-y: scroll;
     gap: 5px;
     border: 1px dotted var(--border);
-    padding: .5em;
+    padding: 0.5em;
     /* width: calc(100% - 1rem); */
     /* height: 100%; */
     background-color: var(--container-back);
@@ -118,7 +115,7 @@
     align-content: center;
     align-items: center;
     width: 2.5em;
-    min-width: 2em!important;
+    min-width: 2em !important;
     height: 2.5em;
     display: flex;
     user-select: none;
@@ -144,9 +141,9 @@
 #preset-title-wrapper {
     display: flex;
     /* flex-direction: column; */
-    gap: .75em;
+    gap: 0.75em;
     /* justify-content: center; */
-    margin-top: .75em;
+    margin-top: 0.75em;
     align-items: center;
     width: 100%;
     user-select: none;
@@ -175,7 +172,7 @@
 #presets-table {
     font-size: 1em;
     /* margin: 50px 1em 1em 1em; */
-    border-spacing: .25em;
+    border-spacing: 0.25em;
     text-align: center;
     width: fit-content;
     border-collapse: collapse;
@@ -184,11 +181,11 @@
 
 #presets-table td {
     text-align: left;
-    padding: .75em;
+    padding: 0.75em;
 }
 
 #menu-header {
-    margin-top: .5rem;
+    margin-top: 0.5rem;
 }
 
 #menu-header h2 {

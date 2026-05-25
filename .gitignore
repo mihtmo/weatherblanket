@@ -3,3 +3,5 @@ backend
 run.bat
 runFlask.bat
 runFlask.sh
+
+.env

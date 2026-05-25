@@ -1,14 +1,21 @@
-import "./WeatherBars.css"
-import React, { useContext, useEffect, useRef } from "react";
-import { heatColorScale, rainScale } from "../helpers/colorScale";
-import BarLoader from "./Loader.js";
-import PageParamsContext from "../contexts/PageParamsContext";
+import './WeatherBars.css';
+import React, { useContext, useEffect, useRef } from 'react';
+import { heatColorScale, rainScale } from '../helpers/colorScale';
+import BarLoader from './Loader.js';
+import PageParamsContext from '../contexts/PageParamsContext';
 import * as d3 from 'd3-scale';
-import { XAxis } from "./Axes";
-import 'react-tooltip/dist/react-tooltip.css'
+import { XAxis } from './Axes';
+import 'react-tooltip/dist/react-tooltip.css';
 
-export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, chartDims, clearMouseCoords }) => {
-    const [isLoading, toolbarParams, setToolbarParams] = useContext(PageParamsContext);
+export const WeatherBars = ({
+    blanketData,
+    handleMousePosition,
+    setChartDims,
+    chartDims,
+    clearMouseCoords,
+}) => {
+    const [isLoading, toolbarParams, setToolbarParams] =
+        useContext(PageParamsContext);
     const reversedYears = [...toolbarParams.selectedYears.slice().reverse()];
     const chartRef = useRef();
     const canvasRef = useRef();
@@ -20,7 +27,11 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
 
     const paintCanvas = () => {
         const canvas = canvasRef.current;
-        const canvasCtx = canvas.getContext('2d', {willReadFrequently: true}, {alpha: false});
+        const canvasCtx = canvas.getContext(
+            '2d',
+            { willReadFrequently: true },
+            { alpha: false },
+        );
         canvas.height = chartDims.height;
         canvas.width = chartDims.width;
         canvasCtx.clearRect(0, 0, chartDims.width, chartDims.height);
@@ -31,7 +42,7 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
 
         // If showing single-year view, preserve space for rainbars
         if (!toolbarParams.multiYear) {
-            heatbarHeight = heatbarHeight * .7;
+            heatbarHeight = heatbarHeight * 0.7;
         }
 
         // For years in yearCount
@@ -39,43 +50,80 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
             // Because of floor, bars will be slighty different widths
             // This is necessary to have clean edges
             const y = Math.floor(i * heatbarHeight);
-            canvasCtx.clearRect(0, y, chartDims.width, heatbarHeight)
+            canvasCtx.clearRect(0, y, chartDims.width, heatbarHeight);
             // For days in year (including leap year)
             for (let j = 0; j < 366; j++) {
                 if (blanketData?.[reversedYears[i]]?.['days']?.[j]) {
                     canvasCtx.beginPath();
                     const x = Math.floor(j * barWidth);
-                    const yearData = blanketData?.[reversedYears[i]]?.['days']
-                    if (toolbarParams.dataType == 'heat' || !toolbarParams.multiYear) {
-                        const highTempColor = heatColorScale(yearData?.[j]?.['MAX']);
-                        const lowTempColor = heatColorScale(yearData?.[j]?.['MIN']);
-                        const grad = canvasCtx.createLinearGradient(x, y, x + barWidth, y + heatbarHeight);
+                    const yearData = blanketData?.[reversedYears[i]]?.['days'];
+                    if (
+                        toolbarParams.dataType == 'heat' ||
+                        !toolbarParams.multiYear
+                    ) {
+                        const highTempColor = heatColorScale(
+                            yearData?.[j]?.['TMAX'],
+                        );
+                        const lowTempColor = heatColorScale(
+                            yearData?.[j]?.['TMIN'],
+                        );
+                        const grad = canvasCtx.createLinearGradient(
+                            x,
+                            y,
+                            x + barWidth,
+                            y + heatbarHeight,
+                        );
                         grad.addColorStop(0, highTempColor);
                         grad.addColorStop(1, lowTempColor);
                         canvasCtx.fillStyle = grad;
                     } else if (toolbarParams.dataType == 'rain') {
-                        canvasCtx.fillStyle = `rgba(0,191,255, ${rainScale(yearData[j]['PRCP'], 5)}`
+                        canvasCtx.fillStyle = `rgba(0,191,255, ${rainScale(yearData[j]['PRCP'], 5)}`;
                     }
-                    canvasCtx.rect(x, y, Math.ceil(barWidth), Math.ceil(heatbarHeight));
+                    canvasCtx.rect(
+                        x,
+                        y,
+                        Math.ceil(barWidth),
+                        Math.ceil(heatbarHeight),
+                    );
                     canvasCtx.fill();
                     // If showing single year, paint rain drips below
                     if (!toolbarParams.multiYear) {
-                        const rainAmount = yearData[j]['PRCP']
+                        const rainAmount = yearData[j]['PRCP'];
                         const rainStart = Math.ceil(y + heatbarHeight);
-                        const rainHeight = Math.ceil(rainScale(rainAmount, 5) * chartDims.height * .3)
+                        const rainHeight = Math.ceil(
+                            rainScale(rainAmount, 5) * chartDims.height * 0.3,
+                        );
                         canvasCtx.beginPath();
-                        const grad = canvasCtx.createLinearGradient(x, rainStart, x + barWidth, rainStart + rainHeight);
-                        grad.addColorStop(0, heatColorScale(yearData?.[j]?.['MIN']));
+                        const grad = canvasCtx.createLinearGradient(
+                            x,
+                            rainStart,
+                            x + barWidth,
+                            rainStart + rainHeight,
+                        );
+                        grad.addColorStop(
+                            0,
+                            heatColorScale(yearData?.[j]?.['TMIN']),
+                        );
                         grad.addColorStop(1, '#2c48b8');
                         canvasCtx.fillStyle = grad;
-                        canvasCtx.rect(x, rainStart, Math.ceil(barWidth), rainHeight);
+                        canvasCtx.rect(
+                            x,
+                            rainStart,
+                            Math.ceil(barWidth),
+                            rainHeight,
+                        );
                         if (rainHeight > 0) {
-                            canvasCtx.arc(x + (Math.ceil(barWidth) / 2), rainStart + rainHeight, Math.ceil(barWidth) / 2, 0, Math.PI);
+                            canvasCtx.arc(
+                                x + Math.ceil(barWidth) / 2,
+                                rainStart + rainHeight,
+                                Math.ceil(barWidth) / 2,
+                                0,
+                                Math.PI,
+                            );
                         }
                         canvasCtx.fill();
                     }
                 }
-
             }
         }
     };
@@ -87,11 +135,11 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
                 if (chart) {
                     const chartRect = chart.getBoundingClientRect();
                     setChartDims({
-                        'width': chartRect.width,
-                        'height': chartRect.height
-                    })
+                        width: chartRect.width,
+                        height: chartRect.height,
+                    });
                 }
-            }); 
+            });
             resizeObserver.observe(chartRef.current);
             return () => resizeObserver.disconnect();
         }
@@ -101,19 +149,24 @@ export const WeatherBars = ({ blanketData, handleMousePosition, setChartDims, ch
         if (canvasRef.current) {
             paintCanvas();
         }
-    }, [chartDims, toolbarParams, blanketData])
+    }, [chartDims, toolbarParams, blanketData]);
 
     return (
-        <div id='weather-bars' className='shadowed-inset'>
-            {isLoading ? 
-                <BarLoader/>
-                :
-                <div className='chart-wrapper' ref={chartRef}>
-                    { chartRef.current &&
-                        <canvas onMouseLeave={clearMouseCoords} onMouseMove={handleMouseMove} id='weather-canvas' ref={canvasRef}></canvas>
-                    }
+        <div id="weather-bars" className="shadowed-inset">
+            {isLoading ? (
+                <BarLoader />
+            ) : (
+                <div className="chart-wrapper" ref={chartRef}>
+                    {chartRef.current && (
+                        <canvas
+                            onMouseLeave={clearMouseCoords}
+                            onMouseMove={handleMouseMove}
+                            id="weather-canvas"
+                            ref={canvasRef}
+                        ></canvas>
+                    )}
                 </div>
-            }
+            )}
         </div>
-    )
-}
+    );
+};
