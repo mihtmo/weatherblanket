@@ -21,7 +21,8 @@
     grid-template-columns: 4rem auto 4rem;
     grid-template-rows: 30px auto;
     height: 100%;
-    width: 100%;
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 .years-labels {

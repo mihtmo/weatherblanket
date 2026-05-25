@@ -357,7 +357,9 @@ select {
 
 #weather-page-wrapper {
     font-weight: 400;
-    width: 100vw;
+    width: fit-content;
+    max-width: 100%;
+    box-sizing: border-box;
 }
 
 #weatherblanket-header {

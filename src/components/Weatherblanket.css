@@ -74,7 +74,7 @@
 } */
 
 .tooltip-header {
-    margin: .5em;
+    margin: 0.5em;
     text-align: center;
     font-weight: bold;
 }
@@ -95,7 +95,24 @@
 
 #heat-key {
     height: 80vh;
-    background-image: linear-gradient(0deg, #2c48b8, #429bd6 18.87%, #6bbcd1 26.98%, #9ad0db 36.32%, #bddbd5 50.47%, #fff2ce 60.85%, #f3b938 65.57%, #ffa42e 70.24%, #fd9415 73.07%, #eb6f02 74.53%, #eb6702 79.25%, #d95700 85.85%, #962101 91.51%, #480300 97.17%, #080000);
+    background-image: linear-gradient(
+        0deg,
+        #2c48b8,
+        #429bd6 18.87%,
+        #6bbcd1 26.98%,
+        #9ad0db 36.32%,
+        #bddbd5 50.47%,
+        #fff2ce 60.85%,
+        #f3b938 65.57%,
+        #ffa42e 70.24%,
+        #fd9415 73.07%,
+        #eb6f02 74.53%,
+        #eb6702 79.25%,
+        #d95700 85.85%,
+        #962101 91.51%,
+        #480300 97.17%,
+        #080000
+    );
 }
 
 #degrees-wrapper {
@@ -109,7 +126,8 @@
     border-radius: 0 0 2.5vw 2.5vw;
 }
 
-.heat-tic, .precip-tic {
+.heat-tic,
+.precip-tic {
     position: absolute;
     width: 1vw;
     left: 0;
@@ -119,7 +137,7 @@
     opacity: 20%;
 }
 
-#heat-key-wrapper{
+#heat-key-wrapper {
     opacity: 0%;
     /* transition: 1s; */
     height: calc(90vh - 90px);
@@ -137,7 +155,7 @@
     text-align: right;
 }
 
-#precip-tic-wrapper{
+#precip-tic-wrapper {
     width: 5vw;
     height: 100%;
     position: absolute;
@@ -167,7 +185,7 @@
     font-size: 1.5em;
     font-style: normal;
     font-weight: 400;
-    letter-spacing: .5em;
+    letter-spacing: 0.5em;
 }
 
 #display-and-header-wrapper {
@@ -175,15 +193,15 @@
     display: flex;
     align-items: center;
     margin-bottom: 60px;
-    /* margin-top: 1em; */
-    /* height: calc(90vh - 80px); */
+    box-sizing: border-box;
+    max-width: 100%;
 }
 
 #key-wrapper:hover {
     width: 18vw;
 }
 
-#key-wrapper:hover > .blanket-key{
+#key-wrapper:hover > .blanket-key {
     width: 5vw;
     opacity: 100%;
 }
@@ -206,7 +224,8 @@
     transform: translateX(9vw);
 }
 
-#key-wrapper:hover #heat-key-wrapper, #key-wrapper:hover #precip-key-wrapper {
+#key-wrapper:hover #heat-key-wrapper,
+#key-wrapper:hover #precip-key-wrapper {
     transform: translateX(calc(5vw));
     opacity: 100%;
 }
@@ -216,9 +235,9 @@
 }
 
 #rainblanket {
-    height:40vh;
+    height: 40vh;
     width: 90vw;
-    margin:auto;
+    margin: auto;
     margin-bottom: 20px;
     position: relative;
 }
@@ -245,11 +264,11 @@
     opacity: 60%;
     background-color: var(--background);
     box-shadow: 0 0 5px 5px var(--background);
-  }
+}
 
-  #blanket-text:hover {
+#blanket-text:hover {
     opacity: 100% !important;
-  }
+}
 
 .tooltip {
     width: fit-content;
@@ -257,7 +276,7 @@
     padding: 15px;
     background-color: beige;
     white-space: nowrap;
-    font-family: 'montserrat'
+    font-family: 'montserrat';
 }
 
 .tooltip-header {
